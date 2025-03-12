@@ -25,7 +25,7 @@ to your `app` folder. The affected files can be copied or merged from
 
 ## Setup
 
-tes git
+tes 2
 `composer update` to install all requirement on system required
 use `composer require endroid/qr-code:^5.0` if the endroid version not v5
 Copy `env` to `.env`
