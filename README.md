@@ -25,7 +25,6 @@ to your `app` folder. The affected files can be copied or merged from
 
 ## Setup
 
-tes git
 `composer update` to install all requirement on system required
 use `composer require endroid/qr-code:^5.0` if the endroid version not v5
 Copy `env` to `.env`
@@ -77,3 +76,5 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+develop by : I Kadek Naryasa
