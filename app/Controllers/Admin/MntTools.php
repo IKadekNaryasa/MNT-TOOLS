@@ -4,8 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
@@ -255,77 +253,80 @@ class MntTools extends BaseController
     {
         $tools = $this->MntTools->findAll();
 
-        $html = '<table style="width:80px; text-align:center; border-spacing:8px;"><tr>';
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=QRCodeList.html");
+
+        echo '<html><head><title>QR Code List</title></head><body>';
+        echo '<table style="width:80px; text-align:center; border-spacing:8px;"><tr>';
 
         $count = 0;
         foreach ($tools as $tool) {
-            $qrCode = new QrCode("{$tool['kodeAlat']}");
+            $qrCode = new QrCode($tool['kodeAlat']);
             $qrCode->setSize(80);
             $qrCode->setMargin(5);
 
             $writer = new PngWriter();
             $qrImage = $writer->write($qrCode)->getDataUri();
 
-            $html .= '<td style="border:1px solid #ddd; padding:8px;">';
-            $html .= "<img src='{$qrImage}' style='width:80px; height:80px;' /><br>";
-            $html .= "<strong style='font-size:10px;'>{$tool['kodeAlat']}</strong><br>";
-            $html .= "<span style='font-size:9px;'>{$tool['namaAlat']}</span>";
-            $html .= '</td>';
+            echo '<td style="border:1px solid #ddd; padding:8px;">';
+            echo "<img src='{$qrImage}' style='width:80px; height:80px;' /><br>";
+            echo "<strong style='font-size:10px;'>{$tool['kodeAlat']}</strong><br>";
+            echo "<span style='font-size:9px;'>{$tool['namaAlat']}</span>";
+            echo '</td>';
 
             $count++;
 
             if ($count % 6 == 0) {
-                $html .= '</tr><tr>';
+                echo '</tr><tr>';
             }
         }
-
-        $html .= '</tr></table>';
-
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf = new Dompdf($options);
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        $dompdf->stream('mntToolsQr.pdf', ['Attachment' => false]);
+        echo '</tr></table>';
+        echo '</body></html>';
     }
+
+
     public function cetakSingleQR()
     {
         $kode = $this->request->getPost('kodeAlat');
         $tool = $this->MntTools->where('kodeAlat', $kode)->first();
-        // \dd($tool);
 
-        $html = '<table style="width:80px; text-align:center; border-spacing:8px;"><tr>';
+        if (!$tool) {
+            return 'Data alat tidak ditemukan.';
+        }
 
-        $qrCode = new QrCode("{$tool['kodeAlat']}");
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=SingleQRCode.html");
+
+        echo '<html><head><title>Cetak QR Code</title>';
+        echo '<style>
+                @page { size: A4; margin: 20mm; } /* Atur ukuran kertas A4 */
+                body { font-family: Arial, sans-serif; text-align: center; }
+                .container { width: 210mm; height: 297mm; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+                table { width: 80px; border-spacing: 8px; text-align: center; margin: auto; }
+                td { border: 1px solid #ddd; padding: 8px; }
+                img { width: 80px; height: 80px; }
+                .kode { font-size: 10px; font-weight: bold; }
+                .nama { font-size: 9px; }
+              </style>';
+        echo '</head><body>';
+        echo '<div class="container">';
+
+        $qrCode = new QrCode($tool['kodeAlat']);
         $qrCode->setSize(80);
         $qrCode->setMargin(5);
 
         $writer = new PngWriter();
         $qrImage = $writer->write($qrCode)->getDataUri();
 
-        $html .= '<td style="border:1px solid #ddd; padding:8px;">';
-        $html .= "<img src='{$qrImage}' style='width:80px; height:80px;' /><br>";
-        $html .= "<strong style='font-size:10px;'>{$tool['kodeAlat']}</strong><br>";
-        $html .= "<span style='font-size:9px;'>{$tool['namaAlat']}</span>";
-        $html .= '</td>';
+        echo '<table><tr>';
+        echo '<td>';
+        echo "<img src='{$qrImage}' /><br>";
+        echo "<span class='kode'>{$tool['kodeAlat']}</span><br>";
+        echo "<span class='nama'>{$tool['namaAlat']}</span>";
+        echo '</td>';
+        echo '</tr></table>';
 
-
-
-        $html .= '</tr></table>';
-
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf = new Dompdf($options);
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        $dompdf->stream('mntToolsQr.pdf', ['Attachment' => false]);
+        echo '</div>';
+        echo '</body></html>';
     }
 }
