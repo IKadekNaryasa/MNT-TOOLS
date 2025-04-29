@@ -80,10 +80,10 @@ class MntTools extends BaseController
         ];
 
         if (!$this->MntTools->insert($dataInsert)) {
-            return redirect()->back()->with('messages_error', 'Gagal menambahkan data inventori baru!')->withInput();
+            return redirect()->back()->with('messages_error', 'Gagal menambahkan data  baru!')->withInput();
         }
 
-        return redirect()->back()->with('messages', 'Berhasil menambahkan data inventori baru dengan kode: ' . $kodeAlat);
+        return redirect()->back()->with('messages', 'Berhasil menambahkan data  baru dengan kode: ' . $kodeAlat);
     }
 
 

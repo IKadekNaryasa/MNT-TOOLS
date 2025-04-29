@@ -155,12 +155,7 @@
                             <div class="form-group form-group-default">
                                 <label>Status</label>
                                 <select class="form-select" name="status" id="" required>
-                                    <option disabled value="" selected>select</option>
-                                    <option value="tersedia">Tersedia</option>
-                                    <option value="dipinjam">Dipinjam</option>
-                                    <option value="perawatan">Dalam Perawatan</option>
-                                    <option value="perbaikan">Dalam Perbaikan</option>
-                                    <option value="Rusak">Barang Rusak</option>
+                                    <option value="tersedia" selected>Tersedia</option>
                                 </select>
                             </div>
                         </div>
