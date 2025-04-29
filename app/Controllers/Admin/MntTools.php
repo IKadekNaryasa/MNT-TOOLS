@@ -4,6 +4,9 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Database;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
@@ -172,46 +175,40 @@ class MntTools extends BaseController
             'categoryId' => $data['categoryId'],
         ];
 
-        if ($dataUpdate['status'] == 'perawatan') {
+        $db = Database::connect();
+        try {
+            $db->transBegin();
+
             if ($dataUpdate['status'] == 'perawatan') {
                 $dataPerawatan = [
                     'mntToolsId' => $mntToolsId,
                     'tanggalPerawatan' => date('Y-m-d'),
                     'statusPerawatan' => 'on progres',
                 ];
-                $query = $this->MntTools->update($mntToolsId, $dataUpdate);
-                $queryPerawatan = $this->Perawatan->insert($dataPerawatan);
-                $kodeAlt = $dataUpdate['kodeAlat'];
-                if (!$queryPerawatan && !$query) {
-                    return redirect()->to(base_url('admin/tools'))->with('messages_error', "Failed entered item code $kodeAlt into the maintenance process");
-                }
-                return redirect()->to(base_url('admin/tools'))->with('messages', "Item code $kodeAlt is entered into the maintenance process");
+                $this->Perawatan->insert($dataPerawatan);
             }
-        }
-        if ($dataUpdate['status'] == 'perbaikan') {
+
             if ($dataUpdate['status'] == 'perbaikan') {
                 $dataPerbaikan = [
                     'mntToolsId' => $mntToolsId,
                     'tanggalPerbaikan' => date('Y-m-d'),
                     'statusPerbaikan' => 'on progres',
                 ];
-                $query = $this->MntTools->update($mntToolsId, $dataUpdate);
-                $queryPerbaikan = $this->Perbaikan->insert($dataPerbaikan);
-                $kodeAlt = $dataUpdate['kodeAlat'];
-                if (!$queryPerbaikan && !$query) {
-                    return redirect()->to(base_url('admin/tools'))->with('messages_error', "Failed entered item code $kodeAlt into the maintenance process");
-                }
-                return redirect()->to(base_url('admin/tools'))->with('messages', "Item code $kodeAlt is entered into the maintenance process");
+                $this->Perbaikan->insert($dataPerbaikan);
             }
-        }
 
-        $query = $this->MntTools->update($mntToolsId, $dataUpdate);
+            $this->MntTools->update($mntToolsId, $dataUpdate);
 
-        if (!$query) {
+            if ($db->transStatus() === false) {
+                $db->transRollback();
+                return redirect()->back()->with('messages_error', 'Failed to update inventory')->withInput();
+            }
+            $db->transCommit();
+            return redirect()->to(base_url('admin/tools'))->with('messages', 'Update data Success!');
+        } catch (\Exception $e) {
+            $db->transRollback();
             return redirect()->back()->with('messages_error', 'Failed to update inventory')->withInput();
         }
-
-        return redirect()->to(base_url('admin/tools'))->with('messages', 'Update data Success!');
     }
 
     public function delete()
