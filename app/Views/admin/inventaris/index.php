@@ -58,7 +58,7 @@
                                         <th class="form-control-sm">Jumlah</th>
                                         <th class="form-control-sm">Keterangan</th>
                                         <th class="form-control-sm">Total Harga</th>
-                                        <!-- <th>Aksi</th> -->
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,17 +74,11 @@
                                             <td class="form-control-sm"><?= $inv['jumlahDI']; ?></td>
                                             <td class="form-control-sm"><?= $inv['keterangan']; ?></td>
                                             <td class="form-control-sm">Rp <?= number_format($inv['total'], 0, ',', '.'); ?></td>
-                                            <!-- <td class="d-flex form-control-sm">
-                                                 <a href="<?= base_url(); ?>admin/update-pengadaan/<?= encrypt_id($inv['dataInventarisId']); ?>">
+                                            <td class="d-flex form-control-sm">
+                                                <a href="<?= base_url(); ?>admin/inventaris/u//<?= encrypt_id($inv['dataInventarisId']); ?>">
                                                     <button class="btn btn-warning btn-sm me-1"><span class="fas fa-edit"></span></button>
                                                 </a>
-                                                <form id="deleteForm-<?= $inv['dataInventarisId']; ?>" action="<?= base_url(); ?>admin/dataInventaris/deletePengadaan" method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <input type="text" name="categoryId" value="<?= $inv['categoryId']; ?>" id="" hidden>
-                                                    <input type="text" hidden value="<?= encrypt_id($inv['dataInventarisId']); ?>" name="dataInventarisId">
-                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete('<?= $inv['dataInventarisId']; ?>')"><span class="fas fa-trash"></span></button>
-                                                </form> 
-                                            </td> -->
+                                            </td>
 
                                         </tr>
                                     <?php endforeach; ?>

@@ -52,6 +52,10 @@ class Peminjaman extends BaseController
         }
 
         $user = $this->Users->where('username', $data['username'])->first();
+
+        if (!$user) {
+            return redirect()->back()->with('messages_error', 'User not found!')->withInput();
+        }
         $suspendUsername = $user['username'];
         if ($user['status'] == 'suspend') {
             return \redirect()->back()->with('messages_error', "Username  $suspendUsername on suspended ");
@@ -241,6 +245,7 @@ class Peminjaman extends BaseController
             ];
 
             $this->Peminjaman->insert($peminjamanData);
+            $this->Users->update($peminjamanData['usersId'], ['status' => 'suspend']);
             // \dd($a);
 
             if ($this->Peminjaman->db->affectedRows() <= 0) {

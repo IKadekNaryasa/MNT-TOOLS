@@ -23,6 +23,7 @@ use App\Controllers\Admin\Peminjaman as AdminPeminjaman;
 
 use App\Controllers\Teknisi\Dashboard as TeknisiDashboard;
 use App\Controllers\Admin\DataInventaris as AdminInventaris;
+use App\Controllers\Admin\DataInventaris;
 use App\Controllers\Admin\Pengembalian as AdminPengembalian;
 use App\Controllers\Teknisi\Peminjaman as TeknisiPeminjaman;
 use App\Controllers\Teknisi\Pengembalian as TeknisiPengembalian;
@@ -98,6 +99,8 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->PUT('request/update', [AdminRequest::class, 'update']);
     $routes->get('users/u/(:any)', [AdminUsers::class, 'viewUpdate']);
     $routes->PUT('users/update', [AdminUsers::class, 'update']);
+    $routes->get('inventaris/u/(:any)', [DataInventaris::class, 'viewUpdate']);
+    $routes->PUT('inventaris/update', [DataInventaris::class, 'update']);
 
     // routes for Delete
     $routes->DELETE('users/delete', [AdminUsers::class, 'delete']);
@@ -115,6 +118,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->post('pengembalian/export', [GlobalExport::class, 'pengembalian']);
     $routes->post('perbaikan/export', [GlobalExport::class, 'perbaikan']);
     $routes->post('perawatan/export', [GlobalExport::class, 'perawatan']);
+    $routes->post('inventory/export', [GlobalExport::class, 'inventory']);
 });
 
 
