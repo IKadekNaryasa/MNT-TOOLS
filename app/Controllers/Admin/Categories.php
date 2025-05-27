@@ -12,6 +12,7 @@ class Categories extends BaseController
     {
         $data = [
             'categories' => $this->Categories->findAll(),
+            'active' => 'kategori'
         ];
 
         // return $this->response->setJSON($data);

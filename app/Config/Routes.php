@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Admin\MntTools;
 use App\Controllers\Auth;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\Export\GlobalExport;
@@ -65,6 +66,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->get('users', [AdminUsers::class, 'index']);
 
     $routes->get('profile', [AdminUsers::class, 'profile']);
+    $routes->get('tools/cek-stok', [MntTools::class, 'cekStok']);
 
 
     // routes for create peminjaman

@@ -47,7 +47,7 @@ class Pengembalian extends Model
     public function getAll()
     {
         $builder = $this->db->table($this->table);
-        $builder->select('pengembalianId,pengembalian.peminjamanCode,pengembalian.tanggalKembali,keteranganPengembalian,pengembalian.byAdmin,statusPengembalian,users.nama,GROUP_CONCAT(namaAlat SEPARATOR ",") as namaAlat,GROUP_CONCAT(detailpeminjaman.kodeAlat SEPARATOR ",") as kodeAlat');
+        $builder->select('pengembalianId,pengembalian.peminjamanCode,pengembalian.tanggalKembali,keteranganPengembalian,pengembalian.byAdmin,statusPengembalian,peminjaman.usersId,users.nama,GROUP_CONCAT(namaAlat SEPARATOR ",") as namaAlat,GROUP_CONCAT(detailpeminjaman.kodeAlat SEPARATOR ",") as kodeAlat');
         $builder->join('peminjaman', 'pengembalian.peminjamanCode = peminjaman.peminjamanCode');
         $builder->join('users', 'pengembalian.byAdmin = users.usersId', 'LEFT');
         $builder->join('detailPeminjaman', 'peminjaman.peminjamanCode = detailPeminjaman.peminjamanCode', 'LEFT');

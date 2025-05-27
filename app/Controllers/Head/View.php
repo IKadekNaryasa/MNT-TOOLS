@@ -11,6 +11,7 @@ class View extends BaseController
     {
         $data = [
             'categories' => $this->Categories->findAll(),
+            'active' => 'export'
         ];
         return view('head/export/index', $data);
     }

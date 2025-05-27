@@ -11,6 +11,8 @@ class Users extends BaseController
     {
         $data = [
             'users' => $this->Users->findAll(),
+            'active' => 'user'
+
         ];
         // return $this->response->setJSON($data);
 

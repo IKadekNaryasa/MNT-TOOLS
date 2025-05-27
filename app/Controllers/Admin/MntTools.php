@@ -18,6 +18,8 @@ class MntTools extends BaseController
         $data = [
             'tools' => $this->MntTools->getAll(),
             'categories' => $this->Categories->findAll(),
+            'active' => 'mnt-tools'
+
         ];
 
         return view('admin/tools/index', $data);
@@ -326,5 +328,30 @@ class MntTools extends BaseController
 
         echo '</div>';
         echo '</body></html>';
+    }
+
+    public function cekStok()
+    {
+        $categories = $this->Categories->findAll();
+        $datacategory = [];
+
+        foreach ($categories as $kt) {
+            $jumlahAlatTersedia = $this->MntTools
+                ->where('status', 'tersedia')
+                ->where('categoryId', $kt['categoryId'])
+                ->countAllResults();
+
+            $datacategory[] = [
+                'categoryId' => $kt['categoryId'],
+                'namaKategori' => $kt['namaKategori'],
+                'jumlahTersedia' => $jumlahAlatTersedia,
+            ];
+        }
+
+        $data = [
+            'categories' => $datacategory,
+            'active' => 'mnt-tools'
+        ];
+        return view('admin/tools/stok', $data);
     }
 }

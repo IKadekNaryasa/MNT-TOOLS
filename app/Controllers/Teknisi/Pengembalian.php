@@ -12,6 +12,8 @@ class Pengembalian extends BaseController
     {
         $data = [
             'pengembalian' => $this->Pengembalian->getDataByUser(\decrypt_id(\session('usersId'))),
+            'active' => 'pengembalian'
+
         ];
         // \dd($data);
         return \view('teknisi/pengembalian/index', $data);

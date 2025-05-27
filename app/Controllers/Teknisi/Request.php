@@ -13,6 +13,8 @@ class Request extends BaseController
     {
         $data = [
             'requests' => $this->Requests->getDataByUser(decrypt_id(session('usersId'))),
+            'active' => 'pengajuan-peminjaman'
+
         ];
 
         return \view('teknisi/request/index', $data);
@@ -38,6 +40,7 @@ class Request extends BaseController
 
         $data = [
             'categories' => $datacategory,
+            'active' => 'pengajuan-peminjaman'
         ];
 
         return view('teknisi/request/newRequest', $data);

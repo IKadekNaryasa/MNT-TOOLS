@@ -11,6 +11,8 @@ class Perawatan extends BaseController
     {
         $data = [
             'perawatan' => $this->Perawatan->getAll(),
+            'active' => 'perawatan'
+
         ];
         // return $this->response->setJSON($data);
 

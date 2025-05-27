@@ -41,6 +41,7 @@ class Dashboard extends BaseController
             'pengembalian' => $pengembalian,
             'admin' => $admin,
             'teknisi' => $teknisi,
+            'active' => 'dashboard'
         ];
         return view('admin/dashboard/index', $data);
     }

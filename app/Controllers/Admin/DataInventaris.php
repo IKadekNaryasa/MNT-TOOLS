@@ -13,6 +13,8 @@ class DataInventaris extends BaseController
         $data = [
             'inventaris' => $this->DataInventaris->getAll(),
             'categories' => $this->Categories->findAll(),
+            'active' => 'data-inventaris'
+
         ];
 
         // return $this->response->setJSON($data);

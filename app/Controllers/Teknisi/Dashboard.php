@@ -14,6 +14,7 @@ class Dashboard extends BaseController
             'pengajuanPengembalian' => $this->Pengembalian->where('statusPengembalian', 'diajukan')->countAllResults(),
             'jumlahPeminjaman' => $this->Peminjaman->where('usersId', decrypt_id(session('usersId')))->countAllResults(),
             'jumlahPengembalian' => $this->Pengembalian->getCountById(decrypt_id(session('usersId')), 'disetujui'),
+            'active' => 'dashboard'
         ];
 
         return view('teknisi/dashboard/index', $data);

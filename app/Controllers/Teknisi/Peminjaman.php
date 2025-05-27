@@ -12,6 +12,8 @@ class Peminjaman extends BaseController
 
         $data = [
             'peminjaman' => $this->Peminjaman->getDataByUser(\decrypt_id(\session('usersId'))),
+            'active' => 'peminjaman'
+
         ];
 
         return \view('teknisi/peminjaman/index', $data);

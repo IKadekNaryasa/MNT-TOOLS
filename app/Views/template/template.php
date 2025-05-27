@@ -116,7 +116,7 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner mt-0">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item">
+                        <li class="nav-item <?= $active == 'dashboard' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/dashboard"
                                 class="collapsed"
@@ -125,7 +125,35 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+
+                        <li class="nav-item <?= $active == 'kategori' ? 'active' : ''; ?> ">
+                            <a
+                                href="<?= base_url(); ?>admin/categories"
+                                class="collapsed"
+                                aria-expanded="false">
+                                <i class="fas fa-tasks"></i>
+                                <p>Kategori</p>
+                            </a>
+                        </li>
+                        <li class="nav-item <?= $active == 'mnt-tools' ? 'active' : ''; ?> ">
+                            <a
+                                href="<?= base_url(); ?>admin/tools"
+                                class="collapsed"
+                                aria-expanded="false">
+                                <i class="fas fa-toolbox"></i>
+                                <p>MNT Tools</p>
+                            </a>
+                        </li>
+                        <li class="nav-item <?= $active == 'data-inventaris' ? 'active' : ''; ?> ">
+                            <a
+                                href="<?= base_url(); ?>admin/inventaris"
+                                class="collapsed"
+                                aria-expanded="false">
+                                <i class="fas fa-shopping-cart"></i>
+                                <p>Data Inventaris</p>
+                            </a>
+                        </li>
+                        <li class="nav-item <?= $active == 'pengajuan-peminjaman' ? 'active' : ''; ?>">
                             <a
                                 href="<?= base_url(); ?>admin/request"
                                 class="collapsed"
@@ -135,34 +163,7 @@
                                 <!-- <span class="badge">soon</span> -->
                             </a>
                         </li>
-                        <li class="nav-item ">
-                            <a
-                                href="<?= base_url(); ?>admin/categories"
-                                class="collapsed"
-                                aria-expanded="false">
-                                <i class="fas fa-tasks"></i>
-                                <p>Kategori</p>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a
-                                href="<?= base_url(); ?>admin/tools"
-                                class="collapsed"
-                                aria-expanded="false">
-                                <i class="fas fa-toolbox"></i>
-                                <p>MNT Tools</p>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a
-                                href="<?= base_url(); ?>admin/inventaris"
-                                class="collapsed"
-                                aria-expanded="false">
-                                <i class="fas fa-shopping-cart"></i>
-                                <p>Data Inventaris</p>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
+                        <li class="nav-item <?= $active == 'peminjaman' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/peminjaman"
                                 class="collapsed"
@@ -172,7 +173,7 @@
                                 <!-- <span class="badge">soon</span> -->
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item <?= $active == 'pengembalian' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/pengembalian"
                                 class="collapsed"
@@ -182,7 +183,7 @@
                                 <!-- <span class="badge">soon</span> -->
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item <?= $active == 'perawatan' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/perawatan"
                                 class="collapsed"
@@ -192,7 +193,7 @@
                                 <!-- <span class="badge">soon</span> -->
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item <?= $active == 'perbaikan' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/perbaikan"
                                 class="collapsed"
@@ -203,7 +204,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item ">
+                        <li class="nav-item <?= $active == 'user' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/users"
                                 class="collapsed"

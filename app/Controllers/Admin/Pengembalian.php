@@ -11,6 +11,8 @@ class Pengembalian extends BaseController
     {
         $data = [
             'pengembalian' => $this->Pengembalian->getAll(),
+            'active' => 'pengembalian'
+
         ];
         // return $this->response->setJSON($data);
 
@@ -25,7 +27,7 @@ class Pengembalian extends BaseController
             'peminjamanCode' => $this->request->getPost('peminjamanCode'),
             'kodeAlat' => $this->request->getPost('kodeAlat'),
             'status' => $this->request->getPost('status'),
-            'byAdmin' => $this->request->getPost('byAdmin'),
+            'userId' => $this->request->getPost('userId'),
             'keteranganPengembalian' => $this->request->getPost('keteranganPengembalian'),
         ];
 
@@ -58,8 +60,8 @@ class Pengembalian extends BaseController
                     'required' => 'Status Not Valid!'
                 ]
             ],
-            'byAdmin' => [
-                'label' => 'byAdmin',
+            'userId' => [
+                'label' => 'userId',
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Admin Not Valid!'
@@ -73,6 +75,7 @@ class Pengembalian extends BaseController
                 ]
             ],
         ];
+
 
         $done = $this->Pengembalian->where('peminjamanCode', $data['peminjamanCode'])->where('statusPengembalian', 'disetujui')->first();
         if ($done) {
@@ -91,7 +94,7 @@ class Pengembalian extends BaseController
             return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Status Not Valid!');
         }
 
-        $userId = decrypt_id(session('usersId'));
+        $adminId = decrypt_id(session('usersId'));
         $statusPengembalian = $data['status'];
         if ($data['status'] == 'ditolak') {
             $statusPengembalian = 'diajukan';
@@ -99,11 +102,10 @@ class Pengembalian extends BaseController
 
         $query1 = $this->Pengembalian->update($data['pengembalianId'], [
             'statusPengembalian' => $statusPengembalian,
-            'byAdmin' => $userId,
+            'byAdmin' => $adminId,
             'tanggalKembali' => date('Y-m-d'),
             'keteranganPengembalian' => $data['keteranganPengembalian'],
         ]);
-        // ganti byAdmin dengan $userId
         if (!$query1) {
             $db->transRollback();
             return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed Set Status Pengembalian');
@@ -120,6 +122,11 @@ class Pengembalian extends BaseController
             return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed Set Status Peminjaman');
         }
 
+        $setActiveUser = $this->Users->update($data['userId'], ['status' => 'active']);
+        if (!$setActiveUser) {
+            $db->transRollback();
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed to activate user');
+        }
         $statusAlat = 'tersedia';
         if ($data['status'] != 'disetujui') {
             $statusAlat = 'dipinjam';

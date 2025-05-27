@@ -116,7 +116,7 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item">
+                        <li class="nav-item  <?= $active == 'dashboard' ? 'active' : ''; ?>">
                             <a
                                 href="<?= base_url(); ?>head/dashboard"
                                 class="collapsed"
@@ -125,7 +125,7 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item  <?= $active == 'export' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>head/export"
                                 class="collapsed"

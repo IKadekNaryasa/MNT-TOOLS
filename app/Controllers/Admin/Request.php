@@ -11,6 +11,8 @@ class Request extends BaseController
     {
         $data = [
             'request' => $this->Requests->getAll(),
+            'active' => 'pengajuan-peminjaman'
+
         ];
 
         // return $this->response->setJSON($data);

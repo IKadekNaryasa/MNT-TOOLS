@@ -96,7 +96,7 @@
                                                                     <input type="hidden" name="_method" value="PUT">
                                                                     <input type="hidden" name="peminjamanCode" value="<?= $pnmbl['peminjamanCode']; ?>">
                                                                     <input type="hidden" name="kodeAlat" value="<?= $pnmbl['kodeAlat']; ?>">
-                                                                    <input type="hidden" name="byAdmin" value="1">
+                                                                    <input type="hidden" name="userId" value="<?= $pnmbl['usersId']; ?>">
                                                                     <div class="row">
                                                                         <div class="col-md-3"></div>
                                                                         <div class="col-md-6">

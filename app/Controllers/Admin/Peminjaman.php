@@ -13,6 +13,8 @@ class Peminjaman extends BaseController
     {
         $data = [
             'peminjaman' => $this->Peminjaman->getAll(),
+            'active' => 'peminjaman'
+
         ];
         // return $this->response->setJSON($data);
 
@@ -246,7 +248,6 @@ class Peminjaman extends BaseController
 
             $this->Peminjaman->insert($peminjamanData);
             $this->Users->update($peminjamanData['usersId'], ['status' => 'suspend']);
-            // \dd($a);
 
             if ($this->Peminjaman->db->affectedRows() <= 0) {
                 $db->transRollback();

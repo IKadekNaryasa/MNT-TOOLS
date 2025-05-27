@@ -116,7 +116,7 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item">
+                        <li class="nav-item  <?= $active == 'dashboard' ? 'active' : ''; ?>">
                             <a
                                 href="<?= base_url(); ?>teknisi/dashboard"
                                 class="collapsed"
@@ -125,7 +125,7 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item  <?= $active == 'pengajuan-peminjaman' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>teknisi/request"
                                 class="collapsed"
@@ -134,7 +134,7 @@
                                 <p>Request Peminjaman</p>
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item  <?= $active == 'peminjaman' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>teknisi/peminjaman"
                                 class="collapsed"
@@ -143,7 +143,7 @@
                                 <p>Peminjaman</p>
                             </a>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item  <?= $active == 'pengembalian' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>teknisi/pengembalian"
                                 class="collapsed"
