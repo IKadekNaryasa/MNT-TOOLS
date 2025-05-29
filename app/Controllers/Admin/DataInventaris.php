@@ -121,7 +121,8 @@ class DataInventaris extends BaseController
         }
         $data = [
             'inventaris' => $inventaris,
-            'categories' => $this->Categories->findAll()
+            'categories' => $this->Categories->findAll(),
+            'active' => 'data-inventaris'
         ];
         return view('admin/inventaris/inventarisUpdate', $data);
     }

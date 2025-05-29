@@ -97,6 +97,7 @@ class Users extends BaseController
         $user = $this->Users->find(decrypt_id($usersId));
         $data = [
             'users' => $user,
+            'active' => 'user'
         ];
         // dd($data['users']);
         return view('admin/users/userUpdate', $data);
@@ -212,6 +213,9 @@ class Users extends BaseController
 
     public function profile()
     {
-        return \view('admin/profile');
+        $data = [
+            'active' => ''
+        ];
+        return \view('admin/profile', $data);
     }
 }

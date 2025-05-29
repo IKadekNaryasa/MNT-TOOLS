@@ -18,6 +18,9 @@ class View extends BaseController
 
     public function profile()
     {
-        return view('head/profile');
+        $data = [
+            'active' => ''
+        ];
+        return view('head/profile', $data);
     }
 }

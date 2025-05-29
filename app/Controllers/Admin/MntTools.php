@@ -102,6 +102,7 @@ class MntTools extends BaseController
             'tools' => $tools,
             'categories' => $this->Categories->findAll(),
             'isEditable' => $isEditable,
+            'active' => 'mnt-tools'
         ];
         // return $this->response->setJSON($data);
         return view('admin/tools/toolUpdate', $data);

@@ -71,9 +71,11 @@
                 </div>
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="btn-close">
-                    Close
-                </button>
+                <a href="<?= base_url('admin/inventaris'); ?>">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" name="btn-close">
+                        Batal
+                    </button>
+                </a>
                 <button class="btn btn-primary ms-5" type="button" onclick="confirmUpdate('<?= $inventaris['dataInventarisId']; ?>')">
                     Submit
                 </button>

@@ -14,6 +14,9 @@ class Users extends BaseController
 
     public function profile()
     {
-        return view('teknisi/profile');
+        $data = [
+            'active' => ''
+        ];
+        return view('teknisi/profile', $data);
     }
 }

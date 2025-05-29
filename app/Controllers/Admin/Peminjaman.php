@@ -23,7 +23,11 @@ class Peminjaman extends BaseController
 
     public function viewAddUser()
     {
-        return view('admin/peminjaman/addUser');
+        $data = [
+            'active' => 'peminjaman'
+
+        ];
+        return view('admin/peminjaman/addUser', $data);
     }
 
     public function showUserByUsername()
@@ -86,7 +90,11 @@ class Peminjaman extends BaseController
 
     public function viewAddTools()
     {
-        return \view('admin/peminjaman/addTools');
+        $data = [
+            'active' => 'peminjaman'
+
+        ];
+        return \view('admin/peminjaman/addTools', $data);
     }
 
     public function toolToCart()
@@ -154,7 +162,11 @@ class Peminjaman extends BaseController
 
     public function cart()
     {
-        return \view('admin/peminjaman/cart');
+        $data = [
+            'active' => 'peminjaman'
+
+        ];
+        return \view('admin/peminjaman/cart', $data);
     }
 
     public function removeToolAndUserSession()
