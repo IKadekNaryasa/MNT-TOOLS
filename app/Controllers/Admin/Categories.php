@@ -68,6 +68,7 @@ class Categories extends BaseController
         $dataKategori = $this->Categories->where('categoryId', $decrypted_id)->first();
         $data = [
             'categories' => $dataKategori,
+            'active' => 'category'
         ];
 
         // return $this->response->setJSON($data);
