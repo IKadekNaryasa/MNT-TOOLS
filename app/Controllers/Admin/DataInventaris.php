@@ -31,7 +31,6 @@ class DataInventaris extends BaseController
             'vendor' => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
             'harga' => $this->request->getPost('harga', FILTER_SANITIZE_STRING),
             'total' => $this->request->getPost('total', FILTER_SANITIZE_STRING),
-            'keterangan' => $this->request->getPost('keterangan', FILTER_SANITIZE_STRING),
         ];
 
         // return $this->response->setJSON($data);
@@ -51,11 +50,6 @@ class DataInventaris extends BaseController
                 'label' => 'vendor',
                 'rules' => 'required',
                 'errors' => ['required' => 'vendor pengadaan required!']
-            ],
-            'keterangan' => [
-                'label' => 'keterangan',
-                'rules' => 'required',
-                'errors' => ['required' => 'keterangan required!']
             ],
         ];
 
@@ -85,7 +79,6 @@ class DataInventaris extends BaseController
             'vendor' => $data['vendor'],
             'harga' => $data['harga'],
             'total' => $data['total'],
-            'keterangan' => $data['keterangan'],
         ];
 
 
@@ -136,7 +129,6 @@ class DataInventaris extends BaseController
             'vendor' => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
             'harga' => $this->request->getPost('harga', FILTER_SANITIZE_STRING),
             'total' => $this->request->getPost('total', FILTER_SANITIZE_STRING),
-            'keterangan' => $this->request->getPost('keterangan', FILTER_SANITIZE_STRING),
         ];
 
         // return $this->response->setJSON($data);
@@ -161,11 +153,6 @@ class DataInventaris extends BaseController
                 'label' => 'tanggal',
                 'rules' => 'required|date',
                 'errors' => ['required' => 'tanggal required!']
-            ],
-            'keterangan' => [
-                'label' => 'keterangan',
-                'rules' => 'required',
-                'errors' => ['required' => 'keterangan required!']
             ],
         ];
 
@@ -194,7 +181,6 @@ class DataInventaris extends BaseController
             'vendor' => $data['vendor'],
             'harga' => $data['harga'],
             'total' => $data['total'],
-            'keterangan' => $data['keterangan'],
         ];
         $category = decrypt_id($data['categoryId']);
         $dataInventarisId = decrypt_id($this->request->getPost('dataInventarisId'));

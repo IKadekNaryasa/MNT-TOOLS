@@ -67,12 +67,13 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
 
     $routes->get('profile', [AdminUsers::class, 'profile']);
     $routes->get('tools/cek-stok', [MntTools::class, 'cekStok']);
+    $routes->post('tools/bandingkan-jumlah-tool', [MntTools::class, 'cekBanding']);
 
 
     // routes for create peminjaman
     $routes->get('add-user-peminjaman', [AdminPeminjaman::class, 'viewAddUser']);
     $routes->post('search-user', [AdminPeminjaman::class, 'showUserByUsername']);
-    $routes->get('add-tools-peminjaman', [AdminPeminjaman::class, 'viewAddTools']);
+    $routes->get('add-tools-peminjaman/(:num)/(:any)', [AdminPeminjaman::class, 'viewAddTools']);
     $routes->post('addToolToCart', [AdminPeminjaman::class, 'toolToCart']);
     $routes->post('removeToolSession', [AdminPeminjaman::class, 'removeToolSession']);
     $routes->get('cart', [AdminPeminjaman::class, 'cart']);

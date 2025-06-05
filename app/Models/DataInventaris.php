@@ -12,7 +12,7 @@ class DataInventaris extends Model
     // protected $returnType       = 'array';
     // protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['categoryId', 'tanggalDI', 'jumlahDI', 'vendor', 'keterangan', 'harga', 'total'];
+    protected $allowedFields    = ['categoryId', 'tanggalDI', 'jumlahDI', 'vendor', 'harga', 'total'];
 
     // protected bool $allowEmptyInserts = false;
     // protected bool $updateOnlyChanged = true;

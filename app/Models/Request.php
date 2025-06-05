@@ -48,7 +48,7 @@ class Request extends Model
     public function getAll()
     {
         $builder = $this->db->table($this->table);
-        $builder->select('request.permintaanCode, GROUP_CONCAT(categories.namaKategori SEPARATOR ", ") as kategori, request.tanggalPermintaan, users.nama, users.kontak, request.status');
+        $builder->select('request.permintaanCode, GROUP_CONCAT(categories.namaKategori SEPARATOR ", ") as kategori, request.tanggalPermintaan, users.nama,users.usersId, users.kontak, request.status');
         $builder->join('detailRequest', 'request.permintaanCode = detailRequest.permintaanCode');
         $builder->join('categories', 'detailRequest.categoryId = categories.categoryId');
         $builder->join('users', 'request.usersId = users.usersId');

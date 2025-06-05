@@ -135,7 +135,16 @@
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <?php if ($req['status'] == 'disetujui'): ?>
+                                                            <?php if ($req['transaction'] != true): ?>
+                                                                <a href="<?= base_url("admin/add-tools-peminjaman/" . $req['usersId']) . '/' . $req['permintaanCode']; ?>">
+                                                                    <button class="btn btn-sm btn-primary">Transaksi Peminjaman</button>
+                                                                </a>
+                                                            <?php elseif ($req['transaction'] == true): ?>
+                                                                <button class="btn btn-sm btn-success">Transaksi Selesai!</button>
+                                                            <?php endif; ?>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,22 +161,4 @@
         </div>
     </div>
 </div>
-
-<!-- <script>
-    function confirmDelete(user_id) {
-        Swal.fire({
-            title: "Yakin menghapus data ini?",
-            text: "Data lainnya dengan user ini juga akan DIHAPUS",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Hapus!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('deleteForm-' + user_id).submit();
-            }
-        });
-    }
-</script> -->
 <?php $this->endSection(); ?>

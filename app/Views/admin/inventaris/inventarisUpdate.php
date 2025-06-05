@@ -61,12 +61,6 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="form-group form-group-default">
-                        <label>Keterangan</label>
-                        <input type="text" id="keterangan" name="keterangan" value="<?= $inventaris['keterangan'] ?? old('keterangan'); ?>" type="text" class="form-control" autocomplete="off" placeholder="" required>
-                    </div>
-                </div>
-                <div class="col-md-12">
                     <span class="text-danger">* Isikan salah satu harga (harga satuan atau harga total atau keduanya)</span>
                 </div>
             </div>

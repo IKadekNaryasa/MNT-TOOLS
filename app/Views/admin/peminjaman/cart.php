@@ -12,7 +12,7 @@
                         <div class="card-header">
                             <div class="row text-center">
                                 <div class="col-2">
-                                    <a href="<?= base_url('admin/add-tools-peminjaman'); ?>">
+                                    <a href="<?= base_url('admin/add-tools-peminjaman/' . session('UID')) . '/' . session('requestCode'); ?>">
                                         <button class="btn btn-secondary btn-sm">&laquo;Back</button>
                                     </a>
                                 </div>
@@ -43,6 +43,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="input-group ms-0">
+                                            <span class="input-group-text" id="basic-addon1">Name</span>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder=""
+                                                aria-label=""
+                                                value="<?= session('Uname'); ?>"
+                                                name=""
+                                                aria-describedby="basic-addon1" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="input-group ms-0">
+                                            <span class="input-group-text" id="basic-addon1">RC</span>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder=""
+                                                aria-label=""
+                                                value="<?= session('requestCode'); ?>"
+                                                name="requestCode"
+                                                aria-describedby="basic-addon1" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="usersId" value="<?= session('UID'); ?>">
 
                                 <div class="col-md-12">
                                     <div class="form-group">

@@ -32,13 +32,13 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="div">
-                                    <a href="<?= base_url('admin/add-user-peminjaman'); ?>">
+                                    <!-- <a href="<?= base_url('admin/add-user-peminjaman'); ?>">
                                         <button class="btn btn-primary btn-sm float-end">
                                             <i class="fas fa-book">
                                                 <i class="fas fa-plus"></i>
                                             </i>
                                         </button>
-                                    </a>
+                                    </a> -->
                                     <button class="btn btn-success btn-sm float-end mx-1" data-bs-toggle="modal" data-bs-target="#exportDataPeminjaman">
                                         <i class="fas fa-file-export"></i>
                                     </button>

@@ -9,10 +9,22 @@ class Request extends BaseController
 {
     public function index()
     {
-        $data = [
-            'request' => $this->Requests->getAll(),
-            'active' => 'pengajuan-peminjaman'
+        $request = $this->Requests->getAll();
+        $finalRequest = [];
+        foreach ($request as $req) {
+            $req['transaction'] = false;
 
+            $exists = $this->Peminjaman->where('requestCode', $req['permintaanCode'])->first();
+
+            if ($exists) {
+                $req['transaction'] = true;
+            }
+
+            $finalRequest[] = $req;
+        }
+        $data = [
+            'request' => $finalRequest,
+            'active' => 'pengajuan-peminjaman'
         ];
 
         // return $this->response->setJSON($data);

@@ -88,13 +88,15 @@ class Peminjaman extends BaseController
         session()->set($data);
     }
 
-    public function viewAddTools()
+    public function viewAddTools($userId, $requestCode)
     {
+        $user = $this->Users->find($userId);
+        session()->set(['requestCode' => $requestCode]);
         $data = [
             'active' => 'peminjaman'
-
         ];
-        return \view('admin/peminjaman/addTools', $data);
+        self::setSession($user);
+        return view('admin/peminjaman/addTools', $data);
     }
 
     public function toolToCart()
@@ -172,7 +174,7 @@ class Peminjaman extends BaseController
     public function removeToolAndUserSession()
     {
         session()->remove(['UID', 'Uname', 'Uusername', 'cart']);
-        return redirect()->to(base_url('admin/add-user-peminjaman'))->with('messages_error', 'Transaksi dibatalkan!');;
+        return redirect()->to(base_url('admin/request'))->with('messages_error', 'Transaksi dibatalkan!');;
     }
 
     public function createPeminjaman()
@@ -182,6 +184,7 @@ class Peminjaman extends BaseController
             'tglPinjam' => $this->request->getPost('tglPinjam', \FILTER_SANITIZE_STRING),
             'keteranganPeminjaman' => $this->request->getPost('keteranganPeminjaman', \FILTER_SANITIZE_STRING),
             'statusPeminjaman' => $this->request->getPost('statusPeminjaman', \FILTER_SANITIZE_STRING),
+            'requestCode' => $this->request->getPost('requestCode', \FILTER_SANITIZE_STRING),
         ];
 
         $validationRules = [
@@ -211,6 +214,13 @@ class Peminjaman extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Status Peminjaman Not Valid!'
+                ]
+            ],
+            'requestCode' => [
+                'label' => 'requestCode',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Request Code Not Valid!'
                 ]
             ],
         ];
@@ -251,6 +261,7 @@ class Peminjaman extends BaseController
             $peminjamanData = [
                 'peminjamanCode' => $peminjamanCode,
                 'usersId' => $data['usersId'],
+                'requestCode' => $data['requestCode'],
                 'tanggalPinjam' => $data['tglPinjam'],
                 'tanggalKembali' => $data['tglPinjam'],
                 'byAdmin' => decrypt_id(session('usersId')),

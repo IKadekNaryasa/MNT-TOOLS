@@ -11,12 +11,8 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row text-center">
-                                <div class="col-2">
-                                    <a href="<?= base_url('admin/add-user-peminjaman'); ?>">
-                                        <button class="btn btn-secondary btn-sm">&laquo;Back</button>
-                                    </a>
-                                </div>
-                                <div class="col-8">
+
+                                <div class="col-10">
                                     <div class="card-title d-block text-center">Add Tools</div>
                                 </div>
                                 <div class="col-2">

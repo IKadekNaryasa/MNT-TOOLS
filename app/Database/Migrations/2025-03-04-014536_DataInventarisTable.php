@@ -31,10 +31,6 @@ class DataInventarisTable extends Migration
                 'constraint'     => '255',
                 'null'           => true,
             ],
-            'keterangan'        => [
-                'type'           => 'TEXT',
-                'null'           => true,
-            ],
             'harga'            => [
                 'type'           => 'VARCHAR',
                 'constraint'     => '30',

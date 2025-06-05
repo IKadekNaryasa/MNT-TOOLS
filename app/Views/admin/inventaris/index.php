@@ -56,7 +56,6 @@
                                         <th class="form-control-sm">Tanggal</th>
                                         <th class="form-control-sm">Vendor</th>
                                         <th class="form-control-sm">Jumlah</th>
-                                        <th class="form-control-sm">Keterangan</th>
                                         <th class="form-control-sm">Total Harga</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -72,7 +71,6 @@
                                             <td class="form-control-sm"><?= $inv['tanggalDI']; ?></td>
                                             <td class="form-control-sm"><?= $inv['vendor']; ?></td>
                                             <td class="form-control-sm"><?= $inv['jumlahDI']; ?></td>
-                                            <td class="form-control-sm"><?= $inv['keterangan']; ?></td>
                                             <td class="form-control-sm">Rp <?= number_format($inv['total'], 0, ',', '.'); ?></td>
                                             <td class="d-flex form-control-sm">
                                                 <a href="<?= base_url(); ?>admin/inventaris/u//<?= encrypt_id($inv['dataInventarisId']); ?>">
@@ -148,12 +146,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group form-group-default">
-                                <label>Keterangan</label>
-                                <input type="text" id="keterangan" name="keterangan" value="<?= old('keterangan'); ?>" type="text" class="form-control" autocomplete="off" placeholder="" required>
-                            </div>
-                        </div>
+
                         <div class="col-md-12">
                             <span class="text-danger">* Isikan salah satu harga (harga satuan atau harga total atau keduanya)</span>
                         </div>

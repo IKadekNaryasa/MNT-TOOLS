@@ -48,6 +48,33 @@
 </head>
 
 <body>
+    <?php if (session('matches')): ?>
+        <script>
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Success!",
+                text: "<?= session('matches'); ?>",
+                showConfirmButton: true,
+            });
+        </script>
+    <?php endif; ?>
+    <?php if (session('notMatches')): ?>
+        <script>
+            Swal.fire({
+                position: "top-center",
+                icon: "warning",
+                title: "Warning!",
+                html: "<?= session('notMatches'); ?>",
+                customClass: {
+                    popup: 'text-start'
+                },
+                showConfirmButton: true,
+            });
+        </script>
+    <?php endif; ?>
+
+
     <?php if (session('messages')): ?>
         <script>
             Swal.fire({

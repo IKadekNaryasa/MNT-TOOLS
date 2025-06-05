@@ -355,4 +355,27 @@ class MntTools extends BaseController
         ];
         return view('admin/tools/stok', $data);
     }
+
+    public function cekBanding()
+    {
+        $categoryList = $this->Categories->findAll();
+        $pesanKurang = [];
+
+        foreach ($categoryList as $kategori) {
+            $jumlahSeharusnya = $kategori['jumlah'];
+            $jumlahAktual = $this->MntTools->where('categoryId', $kategori['categoryId'])->countAllResults();
+
+            if ($jumlahAktual < $jumlahSeharusnya) {
+                $kurang = $jumlahSeharusnya - $jumlahAktual;
+                $pesanKurang[] = "[*] " . $kategori['namaKategori'] . " masih kurang " . $kurang . " buah!";
+            }
+        }
+
+        if (empty($pesanKurang)) {
+            return redirect()->back()->with('matches', 'Jumlah alat sesuai dengan jumlah pada Kategori!');
+        } else {
+            $pesan = implode('<br>', $pesanKurang);
+            return redirect()->back()->with('notMatches', $pesan);
+        }
+    }
 }

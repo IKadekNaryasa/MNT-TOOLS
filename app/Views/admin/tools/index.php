@@ -25,12 +25,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <div class="d-flex align-items-center">
                                     <h4 class="card-title">MNT Tools</h4>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="div">
                                     <button class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addRowModal">
                                         <i class="fas fa-toolbox"></i>
@@ -50,6 +50,12 @@
                                             Cek Stok
                                         </button>
                                     </a>
+                                    <form action="<?= base_url('admin/tools/bandingkan-jumlah-tool'); ?>" method="post">
+                                        <?php csrf_field() ?>
+                                        <button class="btn btn-danger btn-sm float-end mx-1">
+                                            Bandingkan Jumlah Tool
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

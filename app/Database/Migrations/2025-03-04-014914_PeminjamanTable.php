@@ -13,6 +13,10 @@ class PeminjamanTable extends Migration
                 'type'           => 'VARCHAR',
                 'constraint' => 15,
             ],
+            'requestCode'    => [
+                'type'           => 'VARCHAR',
+                'constraint' => 15,
+            ],
             'usersId'          => [
                 'type'           => 'INT',
                 'unsigned'       => true,

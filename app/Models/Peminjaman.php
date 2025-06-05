@@ -12,7 +12,7 @@ class Peminjaman extends Model
     // protected $returnType       = 'array';
     // protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['peminjamanCode', 'usersId', 'tanggalPinjam', 'tanggalKembali', 'keteranganPeminjaman', 'statusPeminjaman', 'byAdmin'];
+    protected $allowedFields    = ['peminjamanCode', 'requestCode', 'usersId', 'tanggalPinjam', 'tanggalKembali', 'keteranganPeminjaman', 'statusPeminjaman', 'byAdmin'];
 
     // protected bool $allowEmptyInserts = false;
     // protected bool $updateOnlyChanged = true;
