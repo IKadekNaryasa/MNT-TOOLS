@@ -31,7 +31,7 @@ class PerbaikanTable extends Migration
             ],
             'statusPerbaikan' => [
                 'type'           => 'ENUM',
-                'constraint'     => ['on progres', 'selesai',],
+                'constraint'     => ['on progres', 'selesai', 'rusak'],
                 'default'        => 'on progres',
             ],
             'biaya'             => [

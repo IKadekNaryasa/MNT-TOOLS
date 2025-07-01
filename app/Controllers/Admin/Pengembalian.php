@@ -10,95 +10,80 @@ class Pengembalian extends BaseController
     public function index()
     {
         $data = [
-            'pengembalian' => $this->Pengembalian->getAll(),
+            'pengembalian' => $this->Pengembalian->getAllWithAlat(),
             'active' => 'pengembalian'
-
         ];
-        // return $this->response->setJSON($data);
 
         return view('admin/pengembalian/index', $data);
     }
 
     public function update()
     {
-        // dd($_POST);
         $data = [
             'pengembalianId' => $this->request->getPost('pengembalianId'),
             'peminjamanCode' => $this->request->getPost('peminjamanCode'),
-            'kodeAlat' => $this->request->getPost('kodeAlat'),
-            'status' => $this->request->getPost('status'),
             'userId' => $this->request->getPost('userId'),
             'keteranganPengembalian' => $this->request->getPost('keteranganPengembalian'),
         ];
 
+        $alatStatus = $this->request->getPost('alat');
+
         $validationRules = [
-            'pengembalianId' => [
-                'label' => 'pengembalianId',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Pengembalian Not Found!'
-                ]
-            ],
-            'peminjamanCode' => [
-                'label' => 'peminjamanCode',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Peminjaman Code Not Found!'
-                ]
-            ],
-            'kodeAlat' => [
-                'label' => 'kodeAlat',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Kode Alat Code Not Found!'
-                ]
-            ],
-            'status' => [
-                'label' => 'status',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Status Not Valid!'
-                ]
-            ],
-            'userId' => [
-                'label' => 'userId',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Admin Not Valid!'
-                ]
-            ],
-            'keteranganPengembalian' => [
-                'label' => 'keteranganPengembalian',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Admin Not Valid!'
-                ]
-            ],
+            'pengembalianId' => ['label' => 'pengembalianId', 'rules' => 'required'],
+            'peminjamanCode' => ['label' => 'peminjamanCode', 'rules' => 'required'],
+            'userId' => ['label' => 'userId', 'rules' => 'required'],
+            'keteranganPengembalian' => ['label' => 'keteranganPengembalian', 'rules' => 'required'],
         ];
-
-
-        $done = $this->Pengembalian->where('peminjamanCode', $data['peminjamanCode'])->where('statusPengembalian', 'disetujui')->first();
-        if ($done) {
-            return \redirect()->back()->with('messages_error', 'Pengembalian telah selesai');
-        }
-
-        $db = \Config\Database::connect();
-        $db->transStart();
 
         if (!$this->validate($validationRules)) {
             $errors = $this->validator->getErrors();
             return redirect()->to(base_url('admin/pengembalian'))->with('errors', $errors);
         }
 
-        if ($data['status'] != 'disetujui' && $data['status'] != 'ditolak') {
-            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Status Not Valid!');
+        if (!$alatStatus || !is_array($alatStatus)) {
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Data alat tidak valid!');
         }
 
-        $adminId = decrypt_id(session('usersId'));
-        $statusPengembalian = $data['status'];
-        if ($data['status'] == 'ditolak') {
-            $statusPengembalian = 'diajukan';
+        $alatBelumKembali = $this->MntTools
+            ->join('detailPeminjaman', 'mntTools.kodeAlat = detailPeminjaman.kodeAlat')
+            ->where('detailPeminjaman.peminjamanCode', $data['peminjamanCode'])
+            ->where('mntTools.status', 'dipinjam')
+            ->countAllResults();
+
+        if ($alatBelumKembali == 0) {
+            return redirect()->back()->with('messages_error', 'Pengembalian telah selesai untuk semua alat');
         }
+
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $adminId = decrypt_id(session('usersId'));
+
+        $adaPengembalian = false;
+
+        foreach ($alatStatus as $item) {
+            $kode = trim($item['kode'] ?? '');
+            $statusAlat = trim($item['status'] ?? '');
+
+            if (empty($kode) || empty($statusAlat)) continue;
+
+            if ($statusAlat === 'dikembalikan') {
+                $this->MntTools->where('kodeAlat', $kode)->set(['status' => 'tersedia'])->update();
+                $adaPengembalian = true;
+            } elseif ($statusAlat === 'rusak/hilang') {
+                $this->MntTools->where('kodeAlat', $kode)->set(['status' => 'rusak'])->update();
+                $adaPengembalian = true;
+            }
+        }
+
+        if (!$adaPengembalian) {
+            $db->transRollback();
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Tidak ada alat yang dikembalikan atau rusak/hilang!');
+        }
+
+        $statusPengembalian = 'disetujui';
+        $statusPeminjaman = 'dikembalikan';
 
         $query1 = $this->Pengembalian->update($data['pengembalianId'], [
             'statusPengembalian' => $statusPengembalian,
@@ -108,52 +93,27 @@ class Pengembalian extends BaseController
         ]);
         if (!$query1) {
             $db->transRollback();
-            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed Set Status Pengembalian');
-        }
-
-        $statusPeminjaman = 'dikembalikan';
-        if ($data['status'] != 'disetujui') {
-            $statusPeminjaman = 'dipinjam';
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Gagal memperbarui data pengembalian.');
         }
 
         $query2 = $this->Peminjaman->update($data['peminjamanCode'], ['statusPeminjaman' => $statusPeminjaman]);
         if (!$query2) {
             $db->transRollback();
-            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed Set Status Peminjaman');
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Gagal memperbarui status peminjaman.');
         }
 
-        $setActiveUser = $this->Users->update($data['userId'], ['status' => 'active']);
-        if (!$setActiveUser) {
+        $query3 = $this->Users->update($data['userId'], ['status' => 'active']);
+        if (!$query3) {
             $db->transRollback();
-            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed to activate user');
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Gagal mengaktifkan pengguna.');
         }
-        $statusAlat = 'tersedia';
-        if ($data['status'] != 'disetujui') {
-            $statusAlat = 'dipinjam';
-        }
-
-        $kodeAlatArray = array_map('trim', explode(',', $data['kodeAlat']));
-
-        foreach ($kodeAlatArray as $kode) {
-            if (empty($kode)) {
-                $db->transRollback();
-                return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Invalid Kode Alat format!');
-            }
-
-            $query3 = $this->MntTools->where('kodeAlat', $kode)->set(['status' => $statusAlat])->update();
-            if (!$query3) {
-                $db->transRollback();
-                return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Failed Set Status Inventory');
-            }
-        }
-
 
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Transaction failed. Changes rolled back!');
+            return redirect()->to(base_url('admin/pengembalian'))->with('messages_error', 'Transaksi gagal. Perubahan dibatalkan.');
         }
 
-        return redirect()->to(base_url('admin/pengembalian'))->with('messages', 'Succes Update All Status');
+        return redirect()->to(base_url('admin/pengembalian'))->with('messages', 'Berhasil mengkonfirmasi pengembalian.');
     }
 }

@@ -32,13 +32,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="div">
-                                    <button class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addRowModal">
-                                        <i class="fas fa-toolbox"></i>
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm float-end mx-1" data-bs-toggle="modal" data-bs-target="#importDataTools">
-                                        <i class="fas fa-file-import"></i>
-                                    </button>
                                     <form action="<?= base_url('admin/tools/cetak-qr'); ?>" method="post" target="_blank">
                                         <?php csrf_field() ?>
                                         <button class="btn btn-secondary btn-sm float-end mx-1">
@@ -50,12 +43,7 @@
                                             Cek Stok
                                         </button>
                                     </a>
-                                    <form action="<?= base_url('admin/tools/bandingkan-jumlah-tool'); ?>" method="post">
-                                        <?php csrf_field() ?>
-                                        <button class="btn btn-danger btn-sm float-end mx-1">
-                                            Bandingkan Jumlah Tool
-                                        </button>
-                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -69,7 +57,7 @@
                                         <th class="form-control-sm">Kode Alat</th>
                                         <th class="form-control-sm">Nama Alat</th>
                                         <th class="form-control-sm">Kategori</th>
-                                        <th class="form-control-sm">Kondisi</th>
+                                        <!-- <th class="form-control-sm">Kondisi</th> -->
                                         <th class="form-control-sm">Status</th>
                                         <th class="form-control-sm">Aksi</th>
                                     </tr>
@@ -84,7 +72,7 @@
                                             <td class="form-control-sm"><?= $tool['kodeAlat']; ?></td>
                                             <td class="form-control-sm"><?= $tool['namaAlat']; ?></td>
                                             <td class="form-control-sm"><?= $tool['namaKategori']; ?></td>
-                                            <td class="form-control-sm"><?= $tool['kondisi']; ?></td>
+                                            <!-- <td class="form-control-sm"><?= $tool['kondisi']; ?></td> -->
                                             <td class="form-control-sm">
                                                 <?php
                                                 if ($tool['status'] == 'tersedia') {

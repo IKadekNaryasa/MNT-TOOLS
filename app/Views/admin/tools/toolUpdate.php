@@ -64,7 +64,7 @@
                                             placeholder="Fill Name" />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" hidden>
                                     <div class="form-group form-group-default">
                                         <label>Kondisi</label>
                                         <input

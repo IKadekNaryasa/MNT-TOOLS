@@ -27,81 +27,119 @@ class DataInventaris extends BaseController
     {
         $data = [
             'categoryId' => $this->request->getPost('categoryId', FILTER_SANITIZE_NUMBER_INT),
-            'jumlahDI' => $this->request->getPost('jumlahDI'),
-            'vendor' => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
-            'harga' => $this->request->getPost('harga', FILTER_SANITIZE_STRING),
-            'total' => $this->request->getPost('total', FILTER_SANITIZE_STRING),
+            'jumlahDI'   => $this->request->getPost('jumlahDI'),
+            'vendor'     => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
+            'harga'      => $this->request->getPost('harga'),
+            'total'      => $this->request->getPost('total'),
+            'namaAlat'      => $this->request->getPost('namaAlat'),
         ];
-
-        // return $this->response->setJSON($data);
 
         $validationRules = [
             'categoryId' => [
-                'label' => 'categoryId',
-                'rules' => 'required',
-                'errors' => ['required' => 'kategori required!']
+                'label' => 'Kategori',
+                'rules' => 'required|is_natural_no_zero',
+                'errors' => ['required' => 'Kategori wajib diisi']
             ],
             'jumlahDI' => [
-                'label' => 'jumlahDI',
-                'rules' => 'required',
-                'errors' => ['required' => 'jumlah required!']
+                'label' => 'Jumlah',
+                'rules' => 'required|is_natural_no_zero',
+                'errors' => ['required' => 'Jumlah wajib diisi']
             ],
             'vendor' => [
-                'label' => 'vendor',
+                'label' => 'Vendor',
                 'rules' => 'required',
-                'errors' => ['required' => 'vendor pengadaan required!']
+                'errors' => ['required' => 'Vendor wajib diisi']
+            ],
+            'namaAlat' => [
+                'label' => 'namaAlat',
+                'rules' => 'required',
+                'errors' => ['required' => 'Nama Alat wajib diisi']
             ],
         ];
 
-        if (!$data['harga'] && !$data['total']) {
-            return redirect()->back()->with('messages_error', 'Isikan salah satu harga')->withInput();
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
         }
 
-        if (!$data['total']) {
+        if (empty($data['harga']) && empty($data['total'])) {
+            return redirect()->back()->with('messages_error', 'Isikan salah satu harga atau total')->withInput();
+        }
+
+        if (empty($data['total'])) {
             $data['total'] = $data['harga'] * $data['jumlahDI'];
         }
 
-        if (!$data['harga']) {
+        if (empty($data['harga'])) {
             $data['harga'] = $data['total'] / $data['jumlahDI'];
-        }
-
-        // return $this->response->setJSON($data);
-
-        if (!$this->validate($validationRules)) {
-            $errors = $this->validator->getErrors();
-            return redirect()->to(base_url('admin/inventaris'))->with('errors', $errors)->withInput();
         }
 
         $dataQuery = [
             'categoryId' => $data['categoryId'],
-            'tanggalDI' => date('Y-m-d'),
-            'jumlahDI' => $data['jumlahDI'],
-            'vendor' => $data['vendor'],
-            'harga' => $data['harga'],
-            'total' => $data['total'],
+            'tanggalDI'  => date('Y-m-d'),
+            'jumlahDI'   => $data['jumlahDI'],
+            'vendor'     => $data['vendor'],
+            'harga'      => $data['harga'],
+            'total'      => $data['total'],
         ];
 
+        $dataKategori = $this->Categories->where('categoryId', $data['categoryId'])->first();
+        $jumlahByKategori = $this->MntTools->where('categoryId', $data['categoryId'])->countAllResults();
+        $batasKategori = (int) $dataKategori['jumlah'];
+        $namaKategori = $dataKategori['namaKategori'];
 
-        $db = Database::connect();
-
+        $db = \Config\Database::connect();
         $db->transBegin();
 
         try {
-            $query = $this->DataInventaris->insert($dataQuery);
-            if (!$query) {
-                throw new \Exception('Failed Insert Data');
-            }
-            $jumlahPerkategori = $this->DataInventaris->countJumlah($dataQuery['categoryId']);
+            $db->table('datainventaris')->insert($dataQuery);
 
-            $query2 = $this->Categories->update($data['categoryId'], ['jumlah' => $jumlahPerkategori]);
-            if (!$query2) {
-                throw new \Exception('Failed update kategori value');
+            $jumlahPerKategori = $this->DataInventaris->countJumlah($data['categoryId']);
+            $this->Categories->update($data['categoryId'], ['jumlah' => $jumlahPerKategori]);
+
+            $words = explode(' ', $namaKategori);
+            $prefix = count($words) >= 3
+                ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1) . substr($words[2], 0, 1))
+                : (count($words) == 2
+                    ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1))
+                    : strtoupper(substr($words[0], 0, 2)));
+            $prefix .= $data['categoryId'];
+
+            $existingCodes = $this->MntTools->select('kodeAlat')->like('kodeAlat', $prefix, 'after')->findAll();
+            $usedNumbers = array_map(function ($item) {
+                return (int) substr($item['kodeAlat'], -3);
+            }, $existingCodes);
+
+            $jumlah = $data['jumlahDI'];
+            $nextNumber = 1;
+
+            for ($i = 1; $i <= $jumlah; $i++) {
+                while (in_array($nextNumber, $usedNumbers)) {
+                    $nextNumber++;
+                }
+
+                $kodeAlat = sprintf('%s%03d', $prefix, $nextNumber);
+                $usedNumbers[] = $nextNumber;
+
+                $toolData = [
+                    'namaAlat'   => $data['namaAlat'],
+                    'kodeAlat'   => $kodeAlat,
+                    'kondisi'    => 'Baik',
+                    'status'     => 'tersedia',
+                    'categoryId' => $data['categoryId'],
+                ];
+
+                $db->table('mnttools')->insert($toolData);
             }
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Gagal menyimpan data!');
+            }
+
             $db->transCommit();
-            return redirect()->to(base_url('admin/inventaris'))->with('messages', 'Insert Data success!');
+            return redirect()->to(base_url('admin/inventaris'))->with('messages', 'Insert Data berhasil!');
         } catch (\Exception $e) {
             $db->transRollback();
-            return redirect()->to(base_url('admin/inventaris'))->with('messages_error', $e->getMessage())->withInput();
+            return redirect()->back()->with('messages_error', $e->getMessage())->withInput();
         }
     }
 

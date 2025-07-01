@@ -36,7 +36,7 @@
                         <input id="tanggalDI" name="tanggalDI" value="<?= $inventaris['tanggalDI'] ?? old('tanggalDI') ?>" type="date" class="form-control" autocomplete="off" placeholder="" required />
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4" hidden>
                     <div class="form-group form-group-default">
                         <label>Jumlah</label>
                         <input id="jumlahDI" name="jumlahDI" value="<?= $inventaris['jumlahDI'] ?? old('jumlahDI'); ?>" type="number" class="form-control" autocomplete="off" placeholder="" required />

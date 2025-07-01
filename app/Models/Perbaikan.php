@@ -47,7 +47,7 @@ class Perbaikan extends Model
     public function getAll()
     {
         $builder = $this->db->table($this->table);
-        $builder->select('perbaikanId,statusPerbaikan,mntTools.kodeAlat,tanggalPerbaikan,tanggalSelesai,biaya,deskripsi');
+        $builder->select('perbaikanId,statusPerbaikan,mntTools.kodeAlat,mntTools.namaAlat,tanggalPerbaikan,tanggalSelesai,biaya,deskripsi');
         $builder->join('mntTools', 'perbaikan.mntToolsId = mntTools.mntToolsId');
         $builder->orderBy('perbaikanId', 'DESC');
         return $builder->get()->getResultArray();

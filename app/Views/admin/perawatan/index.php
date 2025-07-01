@@ -44,6 +44,7 @@
                                     <tr>
                                         <th class="form-control-sm">No</th>
                                         <th class="form-control-sm">Kode Alat</th>
+                                        <th class="form-control-sm">Nama Alat</th>
                                         <th class="form-control-sm">Mulai</th>
                                         <th class="form-control-sm">Selesai</th>
                                         <th class="form-control-sm">Status</th>
@@ -58,6 +59,7 @@
                                         <tr>
                                             <td class="form-control-sm"><?= $no++; ?></td>
                                             <td class="form-control-sm"><?= $prwt['kodeAlat']; ?></td>
+                                            <td class="form-control-sm"><?= $prwt['namaAlat']; ?></td>
                                             <td class="form-control-sm"><?= $prwt['tanggalPerawatan'] ?? '-'; ?></td>
                                             <td class="form-control-sm"><?= $prwt['tanggalSelesai'] ?? '-'; ?></td>
                                             <td class="form-control-sm">

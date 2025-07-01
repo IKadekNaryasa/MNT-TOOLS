@@ -240,6 +240,16 @@
                                 <p>User</p>
                             </a>
                         </li>
+
+                        <li class="nav-item  <?= $active == 'export' ? 'active' : ''; ?> ">
+                            <a
+                                href="<?= base_url(); ?>admin/export"
+                                class="collapsed"
+                                aria-expanded="false">
+                                <i class="fas fa-file-export"></i>
+                                <p>Export</p>
+                            </a>
+                        </li>
                         <!-- <li class="nav-item ">
                             <a
                                 href="#"

@@ -36,12 +36,6 @@
                                         <i class="fas fa-shopping-cart"></i>
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <button class="btn btn-secondary btn-sm float-end mx-1" data-bs-toggle="modal" data-bs-target="#importDataInventaris">
-                                        <i class="fas fa-file-import"></i>
-                                    </button>
-                                    <button class="btn btn-success btn-sm float-end mx-1" data-bs-toggle="modal" data-bs-target="#exportDataInventaris">
-                                        <i class="fas fa-file-export"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -135,6 +129,8 @@
                                 <input type="number" id="total" name="total" value="<?= old('total'); ?>" class="form-control" autocomplete="off" placeholder="">
                             </div>
                         </div>
+
+
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
                                 <label>Kategori</label>
@@ -144,6 +140,13 @@
                                         <option value="<?= $kg['categoryId']; ?>"><?= $kg['namaKategori']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default">
+                                <label>Nama Alat</label>
+                                <input type="text" id="namaAlat" name="namaAlat" value="<?= old('namaAlat'); ?>" type="text" class="form-control" autocomplete="off" placeholder="" required>
                             </div>
                         </div>
 

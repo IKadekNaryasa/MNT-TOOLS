@@ -77,49 +77,112 @@
                                                 <button class="btn btn-secondary btn-sm me-1 float-center" data-bs-toggle="modal" data-bs-target="#pengembalianDetail-<?= $pnmbl['pengembalianId']; ?>">
                                                     </i> Detail
                                                 </button>
-                                                <button class="btn btn-primary btn-sm me-1 float-center" data-bs-toggle="modal" data-bs-target="#konfirmasiModal-<?= $pnmbl['pengembalianId']; ?>" <?= ($pnmbl['statusPengembalian'] == 'disetujui') ? 'disabled' : ''; ?>>
+                                                <button class="btn btn-primary btn-sm me-1 float-center" data-bs-toggle="modal" data-bs-target="#konfirmasiModal-<?= $pnmbl['pengembalianId']; ?>">
                                                     Confirm
                                                 </button>
 
                                                 <!-- Modal konfirmasi -->
                                                 <div class="modal fade" id="konfirmasiModal-<?= $pnmbl['pengembalianId']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailKonfirmasiModal" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="detailModalLabel">Konfirmasi Pengembalian</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <form action="pengembalian/update" method="post">
+                                                            <form action="pengembalian/update" method="post" id="form-konfirmasi-<?= $pnmbl['pengembalianId']; ?>">
                                                                 <div class="modal-body">
                                                                     <?= csrf_field() ?>
                                                                     <input type="hidden" name="pengembalianId" value="<?= $pnmbl['pengembalianId']; ?>">
                                                                     <input type="hidden" name="_method" value="PUT">
                                                                     <input type="hidden" name="peminjamanCode" value="<?= $pnmbl['peminjamanCode']; ?>">
-                                                                    <input type="hidden" name="kodeAlat" value="<?= $pnmbl['kodeAlat']; ?>">
                                                                     <input type="hidden" name="userId" value="<?= $pnmbl['usersId']; ?>">
-                                                                    <div class="row">
-                                                                        <div class="col-md-3"></div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="form-group">
-                                                                                <label>
-                                                                                    <input type="radio" class="ms-0" name="status" value="disetujui" required> Disetujui
-                                                                                    <input type="radio" class="ms-5" name="status" value="ditolak" required> Ditolak
-                                                                                </label>
-                                                                            </div>
+
+                                                                    <table class="table table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No</th>
+                                                                                <th>Kode Alat</th>
+                                                                                <th>Nama Alat</th>
+                                                                                <th>Status Alat</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php
+                                                                            $i = 0;
+                                                                            $alatDipinjamAda = false;
+                                                                            $alatRusak = [];
+
+                                                                            foreach ($pnmbl['alat'] as $alat):
+                                                                                $statusAlat = trim($alat['statusAlat'] ?? '');
+                                                                                if ($statusAlat === 'dipinjam') {
+                                                                                    $alatDipinjamAda = true;
+                                                                                    $i++;
+                                                                            ?>
+                                                                                    <tr>
+                                                                                        <td><?= $i ?></td>
+                                                                                        <td>
+                                                                                            <?= $alat['kodeAlat'] ?>
+                                                                                            <input type="hidden" name="alat[<?= $i ?>][kode]" value="<?= $alat['kodeAlat'] ?>">
+                                                                                        </td>
+                                                                                        <td><?= $alat['namaAlat'] ?></td>
+                                                                                        <td>
+                                                                                            <select name="alat[<?= $i ?>][status]" class="form-select status-select" required>
+                                                                                                <option value="belum dikembalikan" selected>Belum Dikembalikan</option>
+                                                                                                <option value="dikembalikan">Dikembalikan</option>
+                                                                                                <option value="rusak/hilang">Rusak / Hilang</option>
+                                                                                            </select>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                <?php
+                                                                                } elseif ($statusAlat === 'rusak') {
+                                                                                    $i++;
+                                                                                    $alatRusak[] = $alat['kodeAlat'];
+                                                                                ?>
+                                                                                    <tr>
+                                                                                        <td><?= $i ?></td>
+                                                                                        <td><?= $alat['kodeAlat'] ?></td>
+                                                                                        <td><?= $alat['namaAlat'] ?></td>
+                                                                                        <td><span class="text-danger fw-bold">Rusak / Hilang</span></td>
+                                                                                    </tr>
+                                                                            <?php
+                                                                                }
+                                                                            endforeach;
+                                                                            ?>
+
+                                                                            <?php if (!$alatDipinjamAda): ?>
+                                                                                <tr>
+                                                                                    <td colspan="4" class="text-center fw-bold <?= empty($alatRusak) ? 'text-success' : 'text-warning' ?>">
+                                                                                        <?php if (empty($alatRusak)): ?>
+                                                                                            Semua alat telah dikembalikan.
+                                                                                        <?php else: ?>
+                                                                                            Semua alat telah dikembalikan, kecuali alat <?= implode(', ', $alatRusak); ?> rusak/hilang.
+                                                                                        <?php endif; ?>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            <?php endif; ?>
+
+
+                                                                        </tbody>
+
+                                                                    </table>
+                                                                    <?php if ($alatDipinjamAda): ?>
+
+                                                                        <div class="form-group mt-3">
+                                                                            <label>Keterangan</label>
+                                                                            <input type="text" name="keteranganPengembalian" class="form-control" required>
                                                                         </div>
-                                                                        <div class="col-md-3"></div>
-                                                                        <div class="col-md-12">
-                                                                            <div class="form-group form-group-default">
-                                                                                <label>Keterangan</label>
-                                                                                <input type="text" id="keteranganPengembalian" name="keteranganPengembalian" value="<?= old('keteranganPengembalian'); ?>" class="form-control" autocomplete="off" placeholder="" required />
-                                                                            </div>
-                                                                        </div>
+                                                                    <?php endif; ?>
+
+                                                                </div>
+
+                                                                <?php if ($alatDipinjamAda): ?>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn btn-primary btn-confirmasi">Simpan</button>
                                                                     </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                                                </div>
+                                                                <?php endif; ?>
+
                                                             </form>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -142,15 +205,13 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
-                                                                        $kodeAlat = explode(',', $pnmbl['kodeAlat']);
-                                                                        $namaAlat = explode(',', $pnmbl['namaAlat']);
                                                                         $no = 1;
-                                                                        foreach ($kodeAlat  as $index => $kode):
+                                                                        foreach ($pnmbl['alat'] as $alat):
                                                                         ?>
                                                                             <tr>
                                                                                 <td class="text-center"><?= $no++; ?></td>
-                                                                                <td class="text-center"><?= $kode; ?></td>
-                                                                                <td class="text-center"><?= $namaAlat[$index] ?? 'Tidak Diketahui'; ?></td>
+                                                                                <td class="text-center"><?= $alat['kodeAlat']; ?></td>
+                                                                                <td class="text-center"><?= $alat['namaAlat'] ?? 'Tidak Diketahui'; ?></td>
                                                                             </tr>
                                                                         <?php endforeach; ?>
                                                                     </tbody>
@@ -163,6 +224,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </td>
                                         </tr>
 

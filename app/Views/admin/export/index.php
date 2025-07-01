@@ -1,4 +1,4 @@
-<?php $this->extend('template/headDivisiTemplate'); ?>
+<?php $this->extend('template/template'); ?>
 <?php $this->section('content'); ?>
 
 <div class="container">
@@ -7,7 +7,7 @@
             <!-- <h3 class="fw-bold mb-3">Update Data User</h3> -->
             <ul class="breadcrumbs ms-0">
                 <li class="nav-home">
-                    <a href="<?= base_url('head/dashboard'); ?>">
+                    <a href="<?= base_url('admin/dashboard'); ?>">
                         <i class="icon-home"></i>
                     </a>
                 </li>
@@ -15,7 +15,7 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('head/export'); ?>">Export</a>
+                    <a href="<?= base_url('admin/export'); ?>">Export</a>
                 </li>
             </ul>
         </div>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <form action="<?= base_url('head/inventory/export'); ?>" method="post">
+                            <form action="<?= base_url('admin/inventory/export'); ?>" method="post">
                                 <div class="row justify-content-center px-4">
                                     <?php csrf_field() ?>
                                     <div class="col-md-4">
@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <form action="<?= base_url('head/peminjaman/export'); ?>" method="post">
+                            <form action="<?= base_url('admin/peminjaman/export'); ?>" method="post">
                                 <div class="row justify-content-center px-4">
                                     <?php csrf_field() ?>
                                     <div class="col-md-6">
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <form action="<?= base_url('head/pengembalian/export'); ?>" method="post">
+                            <form action="<?= base_url('admin/pengembalian/export'); ?>" method="post">
                                 <div class="row justify-content-center px-4">
                                     <?php csrf_field() ?>
                                     <div class="col-md-6">
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <form action="<?= base_url('head/perbaikan/export'); ?>" method="post">
+                            <form action="<?= base_url('admin/perbaikan/export'); ?>" method="post">
                                 <div class="row justify-content-center px-4">
                                     <?php csrf_field() ?>
                                     <div class="col-md-6">
@@ -230,7 +230,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <form action="<?= base_url('head/perawatan/export'); ?>" method="post">
+                            <form action="<?= base_url('admin/perawatan/export'); ?>" method="post">
                                 <div class="row justify-content-center px-4">
                                     <?php csrf_field() ?>
                                     <div class="col-md-6">

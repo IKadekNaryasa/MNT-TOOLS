@@ -47,7 +47,7 @@ class Perawatan extends Model
     public function getAll()
     {
         $builder = $this->db->table($this->table);
-        $builder->select('perawatanId,statusPerawatan,mntTools.kodeAlat,tanggalPerawatan,tanggalSelesai,biaya,deskripsi');
+        $builder->select('perawatanId,statusPerawatan,mntTools.kodeAlat,mntTools.namaAlat,tanggalPerawatan,tanggalSelesai,biaya,deskripsi');
         $builder->join('mntTools', 'perawatan.mntToolsId = mntTools.mntToolsId');
         $builder->orderBy('perawatanId', 'DESC');
         return $builder->get()->getResultArray();

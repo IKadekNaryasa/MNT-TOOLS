@@ -117,6 +117,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->post('users/import', [GlobalImport::class, 'users']);
 
     // export
+    $routes->get('export', [GlobalExport::class, 'exportAdmin']);
     $routes->post('peminjaman/export', [GlobalExport::class, 'peminjaman']);
     $routes->post('pengembalian/export', [GlobalExport::class, 'pengembalian']);
     $routes->post('perbaikan/export', [GlobalExport::class, 'perbaikan']);

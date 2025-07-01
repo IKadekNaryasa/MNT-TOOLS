@@ -57,6 +57,63 @@ class Pengembalian extends Model
         return $builder->get()->getResultArray();
     }
 
+    public function getAllWithAlat()
+    {
+        $builder = $this->db->table('pengembalian');
+        $builder->select('
+        pengembalian.pengembalianId,
+        pengembalian.peminjamanCode,
+        pengembalian.tanggalKembali,
+        pengembalian.keteranganPengembalian,
+        pengembalian.byAdmin,
+        pengembalian.statusPengembalian,
+        peminjaman.usersId,
+        users.nama,
+        mntTools.kodeAlat,
+        mntTools.namaAlat,
+        mntTools.status AS statusAlat
+    ');
+        $builder->join('peminjaman', 'pengembalian.peminjamanCode = peminjaman.peminjamanCode');
+        $builder->join('users', 'pengembalian.byAdmin = users.usersId', 'LEFT');
+        $builder->join('detailPeminjaman', 'peminjaman.peminjamanCode = detailPeminjaman.peminjamanCode', 'LEFT');
+        $builder->join('mntTools', 'detailPeminjaman.kodeAlat = mntTools.kodeAlat', 'LEFT');
+        $builder->orderBy('pengembalian.pengembalianId', 'DESC');
+
+        $result = $builder->get()->getResultArray();
+
+        $pengembalianGrouped = [];
+
+        foreach ($result as $row) {
+            $pengembalianId = $row['pengembalianId'];
+
+            if (!isset($pengembalianGrouped[$pengembalianId])) {
+                $pengembalianGrouped[$pengembalianId] = [
+                    'pengembalianId' => $row['pengembalianId'],
+                    'peminjamanCode' => $row['peminjamanCode'],
+                    'tanggalKembali' => $row['tanggalKembali'],
+                    'keteranganPengembalian' => $row['keteranganPengembalian'],
+                    'byAdmin' => $row['byAdmin'],
+                    'statusPengembalian' => $row['statusPengembalian'],
+                    'usersId' => $row['usersId'],
+                    'nama' => $row['nama'],
+                    'alat' => [],
+                ];
+            }
+
+            if ($row['kodeAlat']) {
+                $pengembalianGrouped[$pengembalianId]['alat'][] = [
+                    'kodeAlat' => $row['kodeAlat'],
+                    'namaAlat' => $row['namaAlat'],
+                    'statusAlat' => $row['statusAlat']
+                ];
+            }
+        }
+
+        return array_values($pengembalianGrouped);
+    }
+
+
+
     public function getCountById($usersId, $status)
     {
         $builder = $this->db->table($this->table);

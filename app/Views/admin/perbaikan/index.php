@@ -44,6 +44,7 @@
                                     <tr>
                                         <th class="form-control-sm">No</th>
                                         <th class="form-control-sm">Kode Alat</th>
+                                        <th class="form-control-sm">Nama Alat</th>
                                         <th class="form-control-sm">Mulai</th>
                                         <th class="form-control-sm">Selesai</th>
                                         <th class="form-control-sm">Status</th>
@@ -58,6 +59,7 @@
                                         <tr>
                                             <td class="form-control-sm"><?= $no++; ?></td>
                                             <td class="form-control-sm"><?= $prwt['kodeAlat']; ?></td>
+                                            <td class="form-control-sm"><?= $prwt['namaAlat']; ?></td>
                                             <td class="form-control-sm"><?= $prwt['tanggalPerbaikan'] ?? '-'; ?></td>
                                             <td class="form-control-sm"><?= $prwt['tanggalSelesai'] ?? '-'; ?></td>
                                             <td class="form-control-sm">
@@ -66,6 +68,8 @@
                                                     echo '<span class="badge badge-warning">On Progres</span>';
                                                 } elseif ($prwt['statusPerbaikan'] == 'selesai') {
                                                     echo '<span class="badge badge-success">Selesai</span>';
+                                                } elseif ($prwt['statusPerbaikan'] == 'rusak') {
+                                                    echo '<span class="badge badge-danger">Rusak</span>';
                                                 } else {
                                                     echo '<span class="badge badge-danger">tidak valid</span>';
                                                 }
@@ -79,7 +83,7 @@
                                                     class="btn btn-primary btn-sm"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#modal-<?= $prwt['perbaikanId']; ?>"
-                                                    <?= ($prwt['tanggalSelesai'] && $prwt['deskripsi'] && $prwt['biaya']) ? 'disabled' : ''; ?>>
+                                                    <?= ($prwt['statusPerbaikan'] == 'on progres') ? '' : 'disabled'; ?>>
                                                     Selesai
                                                 </button>
                                             </td>
@@ -117,13 +121,23 @@
                             <div class="col-sm-6">
                                 <div class="form-group form-group-default">
                                     <label>Tanggal Selesai</label>
-                                    <input id="tanggalSelesai" name="tanggalSelesai" value="<?= old('tanggalSelesai'); ?>" type="date" class="form-control" autocomplete="off" placeholder="" required />
+                                    <input id="tanggalSelesai" name="tanggalSelesai" value="<?= old('tanggalSelesai') ?? date('Y-m-d'); ?>" type="date" class="form-control" autocomplete="off" placeholder="" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Biaya</label>
                                     <input type="number" id="biaya" name="biaya" value="<?= old('biaya'); ?>" class="form-control" autocomplete="off" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Status Perbaikan</label>
+                                    <select name="statusPerbaikan" id="" class="form-control">
+                                        <option value="selesai" selected>Selesai</option>
+                                        <option value="on progres">On Progress</option>
+                                        <option value="rusak">rusak</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12">

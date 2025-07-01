@@ -10,6 +10,15 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class GlobalExport extends BaseController
 {
+
+    public function exportAdmin()
+    {
+        $data = [
+            'categories' => $this->Categories->findAll(),
+            'active' => 'export'
+        ];
+        return view('admin/export/index', $data);
+    }
     public function inventory()
     {
         $randomIndex = bin2hex(random_bytes(5));

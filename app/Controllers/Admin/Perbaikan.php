@@ -31,7 +31,7 @@ class Perbaikan extends BaseController
                 ->with('messages_error', 'Data perbaikan tidak ditemukan!')
                 ->withInput();
         }
-        if ($perbaikan['tanggalSelesai'] && $perbaikan['deskripsi'] && $perbaikan['biaya']) {
+        if ($perbaikan['statusPerbaikan'] != 'on progres') {
             return redirect()->to(base_url('admin/perbaikan'))
                 ->with('messages_error', 'perbaikan sudah selesai. Tidak dapat diubah lagi!')
                 ->withInput();
@@ -41,13 +41,13 @@ class Perbaikan extends BaseController
             'tanggalSelesai' => $this->request->getPost('tanggalSelesai'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'biaya' => $this->request->getPost('biaya'),
+            'statusPerbaikan' => $this->request->getPost('statusPerbaikan'),
         ];
 
         // Format biaya menjadi Rupiah
         $data['biaya'] = 'Rp ' . number_format((int)$data['biaya'], 0, ',', '.');
 
 
-        $status = 'tersedia';
         $kodeAlat = $this->request->getPost('kodeAlat');
 
         $validationRules = [
@@ -79,6 +79,13 @@ class Perbaikan extends BaseController
                     'required' => 'Biaya required!'
                 ]
             ],
+            'statusPerbaikan' => [
+                'label' => 'statusPerbaikan',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Status Perbaikan required!'
+                ]
+            ],
         ];
 
         if (!$this->validate($validationRules)) {
@@ -90,8 +97,16 @@ class Perbaikan extends BaseController
             'tanggalSelesai' => $data['tanggalSelesai'],
             'deskripsi' => $data['deskripsi'],
             'biaya' => $data['biaya'],
-            'statusPerbaikan' => 'selesai'
+            'statusPerbaikan' => $data['statusPerbaikan']
         ];
+
+        if ($dataUpdate['statusPerbaikan'] == 'selesai') {
+            $statusAlat = 'tersedia';
+        } elseif ($dataUpdate['statusPerbaikan'] == 'rusak') {
+            $statusAlat = 'rusak';
+        } else {
+            $statusAlat = 'perbaikan';
+        }
 
 
         // dd($data, $dataUpdate, $kode_alat, $status);
@@ -105,7 +120,7 @@ class Perbaikan extends BaseController
         }
 
         // dd($this->inventoryModel->where('kode_alat', $kode_alat)->first());
-        $query = $this->MntTools->where('kodeAlat', $kodeAlat)->set(['status' => $status])->update();
+        $query = $this->MntTools->where('kodeAlat', $kodeAlat)->set(['status' => $statusAlat])->update();
         if (!$query) {
             $db->transRollback();
             return redirect()->to(base_url('admin/perbaikan'))->with('messages_error', 'Failed Update Inventory Status')->withInput();
