@@ -3,7 +3,6 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <!-- <h3 class="fw-bold mb-3">Update Data User</h3> -->
             <ul class="breadcrumbs ms-0">
                 <li class="nav-home">
                     <a href="<?= base_url('admin/dashboard'); ?>">
@@ -18,109 +17,97 @@
                 </li>
             </ul>
         </div>
-        <!-- komponen -->
+
         <div class="page-category">
-            <!-- isi page di sini -->
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-center">
-                                    <h4 class="card-title">MNT Tools</h4>
+                    <form action="<?= base_url('admin/tools/cetak-qr'); ?>" method="post" target="_blank">
+                        <?= csrf_field() ?>
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="card-title">MNT Tools</h4>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="div">
-                                    <form action="<?= base_url('admin/tools/cetak-qr'); ?>" method="post" target="_blank">
-                                        <?php csrf_field() ?>
-                                        <button class="btn btn-secondary btn-sm float-end mx-1">
+                                <div class="col-md-6">
+                                    <div class="div">
+                                        <button class="btn btn-secondary btn-sm float-end mx-1" type="submit">
                                             <i class="fas fa-qrcode"> Cetak QR</i>
                                         </button>
-                                    </form>
-                                    <a href="<?= base_url('admin/tools/cek-stok'); ?>">
-                                        <button class="btn btn-warning btn-sm float-end mx-1">
-                                            Cek Stok
-                                        </button>
-                                    </a>
-
+                                        <a href="<?= base_url('admin/tools/cek-stok'); ?>">
+                                            <button class="btn btn-warning btn-sm float-end mx-1" type="button">
+                                                Cek Stok
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="usersData" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="form-control-sm">No</th>
-                                        <th class="form-control-sm">Kode Alat</th>
-                                        <th class="form-control-sm">Nama Alat</th>
-                                        <th class="form-control-sm">Kategori</th>
-                                        <!-- <th class="form-control-sm">Kondisi</th> -->
-                                        <th class="form-control-sm">Status</th>
-                                        <th class="form-control-sm">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $no = 1;
-                                    foreach ($tools as $tool):
-                                    ?>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="usersData" class="display table table-striped table-hover">
+                                    <thead>
                                         <tr>
-                                            <td class="form-control-sm"><?= $no++; ?> </td>
-                                            <td class="form-control-sm"><?= $tool['kodeAlat']; ?></td>
-                                            <td class="form-control-sm"><?= $tool['namaAlat']; ?></td>
-                                            <td class="form-control-sm"><?= $tool['namaKategori']; ?></td>
-                                            <!-- <td class="form-control-sm"><?= $tool['kondisi']; ?></td> -->
-                                            <td class="form-control-sm">
-                                                <?php
-                                                if ($tool['status'] == 'tersedia') {
-                                                    echo '<span class="badge badge-success">tersedia</span>';
-                                                } elseif ($tool['status'] == 'dipinjam') {
-                                                    echo '<span class="badge badge-info">dipinjam</span>';
-                                                } elseif ($tool['status'] == 'perawatan') {
-                                                    echo '<span class="badge badge-warning">perawatan</span>';
-                                                } elseif ($tool['status'] == 'perbaikan') {
-                                                    echo '<span class="badge badge-secondary">perbaikan</span>';
-                                                } else {
-                                                    echo '<span class="badge badge-danger">Rusak</span>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="d-flex">
-
-                                                <?php if ($tool['status'] != 'tersedia'): ?>
-                                                    <button class="btn btn-warning btn-sm me-1" disabled><span class="fas fa-edit"></span></button>
-                                                <?php else: ?>
-                                                    <a href="<?= base_url(); ?>admin/tools/u/<?= encrypt_id($tool['mntToolsId']); ?>">
-                                                        <button class="btn btn-warning btn-sm me-1"><span class="fas fa-edit"></span></button>
-                                                    </a>
-                                                <?php endif ?>
-
-                                                <form id="deleteForm-<?= $tool['mntToolsId']; ?>" action="<?= base_url(); ?>admin/tools/delete" method="POST">
-                                                    <?= csrf_field(); ?>
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <input type="text" hidden value="<?= encrypt_id($tool['mntToolsId']); ?>" name="mntToolsId">
-                                                    <button type="button" class="btn btn-danger btn-sm me-1" onclick="confirmDelete('<?= $tool['mntToolsId']; ?>')"><span class="fas fa-trash"></span></button>
-                                                </form>
-                                                <form action="<?= base_url('admin/tools/cetak-single-qr'); ?>" method="post" target="_blank">
-                                                    <?= csrf_field(); ?>
-                                                    <input type="hidden" hidden value="<?= $tool['kodeAlat']; ?>" name="kodeAlat">
-                                                    <button type="submit" class="btn btn-secondary btn-sm"><span class="fas fa-print"></span></button>
-                                                </form>
-                                            </td>
-
+                                            <th class="form-control-sm">#</th>
+                                            <th class="form-control-sm">No</th>
+                                            <th class="form-control-sm">Kode Alat</th>
+                                            <th class="form-control-sm">Nama Alat</th>
+                                            <th class="form-control-sm">Kategori</th>
+                                            <th class="form-control-sm">Status</th>
+                                            <th class="form-control-sm">Aksi</th>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                        <?php $no = 1;
+                                        foreach ($tools as $tool): ?>
+                                            <tr>
+                                                <td><input type="checkbox" name="selected_tools[]" class="checkItem" value="<?= $tool['mntToolsId']; ?>"></td>
+                                                <td class="form-control-sm"><?= $no++; ?></td>
+                                                <td class="form-control-sm"><?= $tool['kodeAlat']; ?></td>
+                                                <td class="form-control-sm"><?= $tool['namaAlat']; ?></td>
+                                                <td class="form-control-sm"><?= $tool['namaKategori']; ?></td>
+                                                <td class="form-control-sm">
+                                                    <?php
+                                                    $status = $tool['status'];
+                                                    $badge = match ($status) {
+                                                        'tersedia' => 'success',
+                                                        'dipinjam' => 'info',
+                                                        'perawatan' => 'warning',
+                                                        'perbaikan' => 'secondary',
+                                                        default => 'danger',
+                                                    };
+                                                    echo "<span class='badge badge-$badge'>$status</span>";
+                                                    ?>
+                                                </td>
+                    </form>
+
+                    <td class="d-flex">
+                        <?php if ($tool['status'] != 'tersedia'): ?>
+                            <button class="btn btn-warning btn-sm me-1" disabled><span class="fas fa-edit"></span></button>
+                        <?php else: ?>
+                            <a href="<?= base_url('admin/tools/u/' . encrypt_id($tool['mntToolsId'])); ?>">
+                                <button class="btn btn-warning btn-sm me-1" type="button"><span class="fas fa-edit"></span></button>
+                            </a>
+                        <?php endif ?>
+                        <form id="deleteForm-<?= $tool['mntToolsId']; ?>" action="<?= base_url('admin/tools/delete'); ?>" method="POST">
+                            <?= csrf_field(); ?>
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="mntToolsId" value="<?= encrypt_id($tool['mntToolsId']); ?>">
+                            <button type="button" class="btn btn-danger btn-sm me-1" onclick="confirmDelete('<?= $tool['mntToolsId']; ?>')"><span class="fas fa-trash"></span></button>
+                        </form>
+                    </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+                </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 <!-- modal -->
 <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -235,5 +222,10 @@
             }
         });
     }
+
+    document.getElementById("checkAll").addEventListener("change", function() {
+        const checked = this.checked;
+        document.querySelectorAll(".checkItem").forEach(cb => cb.checked = checked);
+    });
 </script>
 <?php $this->endSection(); ?>

@@ -252,38 +252,46 @@ class MntTools extends BaseController
 
     public function cetakQR()
     {
-        $tools = $this->MntTools->findAll();
+        $selected = $this->request->getPost('selected_tools');
 
-        header("Content-type: application/vnd.ms-excel");
+        $tools = $selected
+            ? $this->MntTools->whereIn('mntToolsId', $selected)->findAll()
+            : $this->MntTools->findAll();
+
+        header("Content-type: application/octet-stream");
         header("Content-Disposition: attachment; filename=QRCodeList.html");
 
-        echo '<html><head><title>QR Code List</title></head><body>';
-        echo '<table style="width:80px; text-align:center; border-spacing:8px;"><tr>';
+        echo '<html><head><title>QR Code List</title><style>
+        table { width:100%; border-spacing:10px; }
+        td { text-align:center; padding:10px; border:1px solid #ddd; }
+        img { width:80px; height:80px; }
+        small { font-size:10px; display:block; }
+    </style></head><body>';
 
+        echo '<table><tr>';
         $count = 0;
-        foreach ($tools as $tool) {
-            $qrCode = new QrCode($tool['kodeAlat']);
-            $qrCode->setSize(80);
-            $qrCode->setMargin(5);
 
-            $writer = new PngWriter();
+        foreach ($tools as $tool) {
+            $qrCode = new \Endroid\QrCode\QrCode($tool['kodeAlat']);
+            $qrCode->setSize(80)->setMargin(5);
+
+            $writer = new \Endroid\QrCode\Writer\PngWriter();
             $qrImage = $writer->write($qrCode)->getDataUri();
 
-            echo '<td style="border:1px solid #ddd; padding:8px;">';
-            echo "<img src='{$qrImage}' style='width:80px; height:80px;' /><br>";
-            echo "<strong style='font-size:10px;'>{$tool['kodeAlat']}</strong><br>";
-            echo "<span style='font-size:9px;'>{$tool['namaAlat']}</span>";
+            echo '<td>';
+            echo "<img src='{$qrImage}'><br>";
+            echo "<strong>{$tool['kodeAlat']}</strong><br>";
+            echo "<small>{$tool['namaAlat']}</small>";
             echo '</td>';
 
             $count++;
-
-            if ($count % 6 == 0) {
-                echo '</tr><tr>';
-            }
+            if ($count % 4 == 0) echo '</tr><tr>';
         }
+
         echo '</tr></table>';
         echo '</body></html>';
     }
+
 
 
     public function cetakSingleQR()
