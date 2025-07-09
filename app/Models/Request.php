@@ -69,4 +69,15 @@ class Request extends Model
         $builder->groupBy('request.permintaanCode');
         return $builder->get()->getResultArray();
     }
+    public function getByRequestCode($RCode)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('request.permintaanCode,request.status,tanggalPermintaan,GROUP_CONCAT(categories.categoryId SEPARATOR ",") as category_id');
+        $builder->join('detailrequest', 'request.permintaanCode = detailrequest.permintaanCode', 'LEFT');
+        $builder->join('categories', 'detailrequest.categoryId = categories.categoryId', 'LEFT');
+        $builder->where('request.permintaanCode', $RCode);
+        $builder->orderBy('request.permintaanCode', 'DESC');
+        $builder->groupBy('request.permintaanCode');
+        return $builder->get()->getResultArray();
+    }
 }

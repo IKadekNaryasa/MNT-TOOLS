@@ -32,7 +32,6 @@ class Peminjaman extends BaseController
 
     public function showUserByUsername()
     {
-        // dd(session('UID'), session('Uuname'), session('Uusername'));
         if (session('UID') && session('Uuname') && session('Uusername')) {
             session()->remove(['UID', 'Uname', 'Uusername']);
         }
@@ -70,7 +69,6 @@ class Peminjaman extends BaseController
         if (!$user) {
             return redirect()->back()->with('messages_error', 'User not found')->withInput();
         }
-        // dd($user);
         self::setSession($user);
 
         return redirect()->to(base_url('admin/add-user-peminjaman'));
@@ -101,9 +99,7 @@ class Peminjaman extends BaseController
 
     public function toolToCart()
     {
-        $data = [
-            'kodeAlat' => $this->request->getPost('kodeAlat', FILTER_SANITIZE_STRING),
-        ];
+        $kodeAlat = $this->request->getPost('kodeAlat', FILTER_SANITIZE_STRING);
 
         $validationRules = [
             'kodeAlat' => [
@@ -111,7 +107,7 @@ class Peminjaman extends BaseController
                 'rules' => 'required|min_length[3]',
                 'errors' => [
                     'required' => 'Kode Alat Required!',
-                    'min_length' => 'Kode alat must be at leat 3 character long!',
+                    'min_length' => 'Kode alat must be at least 3 characters long!',
                 ]
             ]
         ];
@@ -120,32 +116,63 @@ class Peminjaman extends BaseController
             return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
         }
 
-        $alat = $this->MntTools->where('kodeAlat', $data['kodeAlat'])->where('status', 'tersedia')->first();
+        $alat = $this->MntTools
+            ->where('kodeAlat', $kodeAlat)
+            ->where('status', 'tersedia')
+            ->first();
 
         if (!$alat) {
-            return redirect()->back()->with('messages_error', 'Alat Not Found!')->withInput();
+            return redirect()->back()->with('messages_error', 'Alat tidak ditemukan atau tidak tersedia!')->withInput();
         }
-        // dd($alat);
+
+        $toolsOnRequest = $this->Requests->getByRequestCode(session('requestCode'));
+        if (empty($toolsOnRequest)) {
+            return redirect()->back()->with('messages_error', 'Data request tidak ditemukan!')->withInput();
+        }
+
+        $allowedCategoryIds = explode(',', $toolsOnRequest[0]['category_id']);
+
+        $categoryRequestCount = array_count_values(array_map('trim', $allowedCategoryIds));
+
+        $alatCategoryId = $alat['categoryId'];
+
+        if (!in_array($alatCategoryId, $allowedCategoryIds)) {
+            return redirect()->back()->with('messages_error', 'Alat tidak sesuai dengan kategori yang diminta!')->withInput();
+        }
 
         $cart = session()->get('cart') ?? [];
+        $cartCategoryCount = [];
 
         foreach ($cart as $item) {
             if ($item['kodeAlat'] == $alat['kodeAlat']) {
                 return redirect()->back()->with('messages_error', 'Alat sudah ada di keranjang!')->withInput();
             }
+
+            $catId = $item['categoryId'];
+            if (!isset($cartCategoryCount[$catId])) {
+                $cartCategoryCount[$catId] = 0;
+            }
+            $cartCategoryCount[$catId]++;
         }
 
+        $currentCount = $cartCategoryCount[$alatCategoryId] ?? 0;
+        $requestedCount = $categoryRequestCount[$alatCategoryId];
 
+        if ($currentCount >= $requestedCount) {
+            return redirect()->back()->with('messages_error', 'Jumlah alat pada kategori ini sudah sesuai dengan permintaan!')->withInput();
+        }
 
         $cart[] = [
             'kodeAlat' => $alat['kodeAlat'],
-            'namaAlat' => $alat['namaAlat']
+            'namaAlat' => $alat['namaAlat'],
+            'categoryId' => $alat['categoryId'],
         ];
 
         session()->set('cart', $cart);
 
         return redirect()->back();
     }
+
 
     public function removeToolSession()
     {

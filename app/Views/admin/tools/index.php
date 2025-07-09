@@ -50,7 +50,7 @@
                                 <table id="usersData" class="display table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="form-control-sm">#</th>
+                                            <th class="form-control-sm"><input type="checkbox" id="checkAll"></th>
                                             <th class="form-control-sm">No</th>
                                             <th class="form-control-sm">Kode Alat</th>
                                             <th class="form-control-sm">Nama Alat</th>
@@ -59,6 +59,7 @@
                                             <th class="form-control-sm">Aksi</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         <?php $no = 1;
                                         foreach ($tools as $tool): ?>
@@ -226,6 +227,24 @@
     document.getElementById("checkAll").addEventListener("change", function() {
         const checked = this.checked;
         document.querySelectorAll(".checkItem").forEach(cb => cb.checked = checked);
+    });
+
+    let table = $('#usersData').DataTable();
+
+    $('#checkAll').on('click', function() {
+        let rows = table.rows({
+            'search': 'applied'
+        }).nodes();
+
+        $('input[type="checkbox"].checkItem', rows).prop('checked', this.checked);
+    });
+
+    $('#usersData tbody').on('change', '.checkItem', function() {
+        let rows = table.rows({
+            'search': 'applied'
+        }).nodes();
+        let allChecked = $('input.checkItem:checked', rows).length === $('input.checkItem', rows).length;
+        $('#checkAll').prop('checked', allChecked);
     });
 </script>
 <?php $this->endSection(); ?>
