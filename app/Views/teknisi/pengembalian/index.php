@@ -72,19 +72,20 @@
                                                 </button>
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="detailModal-<?= $item['peminjamanCode']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="peminjamanDetailModalLabel">Detail Pengembalian - <?= $item['peminjamanCode']; ?></h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <table class="">
+                                                                <table class="table table-striped">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>No</th>
                                                                             <th>Kode Alat</th>
                                                                             <th>Nama Alat</th>
+                                                                            <th>Status</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -92,12 +93,32 @@
                                                                         $kodeAlat = explode(',', $item['kodeAlat']);
                                                                         $namaAlat = explode(',', $item['namaAlat']);
                                                                         $no = 1;
-                                                                        foreach ($kodeAlat  as $index => $kode):
+                                                                        foreach ($kodeAlat as $index => $kode):
+                                                                            $kode = trim($kode);
+                                                                            $statusAlatSaatIni = $statusAlat[$kode] ?? 'tidak diketahui';
+
+
+                                                                            if ($statusAlatSaatIni == 'tersedia') {
+                                                                                $statusText = 'Dikembalikan';
+                                                                                $badgeClass = 'badge-success';
+                                                                            } elseif ($statusAlatSaatIni == 'rusak') {
+                                                                                $statusText = 'Rusak';
+                                                                                $badgeClass = 'badge-danger';
+                                                                            } elseif ($statusAlatSaatIni == 'dipinjam') {
+                                                                                $statusText = 'Belum Dikembalikan';
+                                                                                $badgeClass = 'badge-warning';
+                                                                            } else {
+                                                                                $statusText = 'Tidak Diketahui';
+                                                                                $badgeClass = 'badge-secondary';
+                                                                            }
                                                                         ?>
                                                                             <tr>
                                                                                 <td class="text-center"><?= $no++; ?></td>
                                                                                 <td class="text-center"><?= $kode; ?></td>
                                                                                 <td class="text-center"><?= $namaAlat[$index] ?? 'Tidak Diketahui'; ?></td>
+                                                                                <td class="text-center">
+                                                                                    <span class="badge <?= $badgeClass; ?>"><?= $statusText; ?></span>
+                                                                                </td>
                                                                             </tr>
                                                                         <?php endforeach; ?>
                                                                     </tbody>

@@ -13,6 +13,7 @@ class DataInventaris extends BaseController
         $data = [
             'inventaris' => $this->DataInventaris->getAll(),
             'categories' => $this->Categories->findAll(),
+            'vendors' => $this->vendor->findAll(),
             'active' => 'data-inventaris'
 
         ];
@@ -28,7 +29,7 @@ class DataInventaris extends BaseController
         $data = [
             'categoryId' => $this->request->getPost('categoryId', FILTER_SANITIZE_NUMBER_INT),
             'jumlahDI'   => $this->request->getPost('jumlahDI'),
-            'vendor'     => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
+            'vendorId'     => $this->request->getPost('vendorId', FILTER_SANITIZE_STRING),
             'harga'      => $this->request->getPost('harga'),
             'total'      => $this->request->getPost('total'),
             'namaAlat'      => $this->request->getPost('namaAlat'),
@@ -45,9 +46,9 @@ class DataInventaris extends BaseController
                 'rules' => 'required|is_natural_no_zero',
                 'errors' => ['required' => 'Jumlah wajib diisi']
             ],
-            'vendor' => [
+            'vendorId' => [
                 'label' => 'Vendor',
-                'rules' => 'required',
+                'rules' => 'required|is_natural_no_zero',
                 'errors' => ['required' => 'Vendor wajib diisi']
             ],
             'namaAlat' => [
@@ -77,7 +78,7 @@ class DataInventaris extends BaseController
             'categoryId' => $data['categoryId'],
             'tanggalDI'  => date('Y-m-d'),
             'jumlahDI'   => $data['jumlahDI'],
-            'vendor'     => $data['vendor'],
+            'vendorId'     => $data['vendorId'],
             'harga'      => $data['harga'],
             'total'      => $data['total'],
         ];
@@ -147,13 +148,15 @@ class DataInventaris extends BaseController
     {
         $id = decrypt_id($id);
         $inventaris = $this->DataInventaris->find($id);
+        $vendor = $this->vendor->find($inventaris['vendorId']);
         if (!$inventaris) {
             return redirect()->back()->with('messages_error', 'Data not found!');
         }
         $data = [
             'inventaris' => $inventaris,
             'categories' => $this->Categories->findAll(),
-            'active' => 'data-inventaris'
+            'active' => 'data-inventaris',
+            'vendor' => $vendor['vendor']
         ];
         return view('admin/inventaris/inventarisUpdate', $data);
     }
@@ -164,7 +167,6 @@ class DataInventaris extends BaseController
             'categoryId' => $this->request->getPost('categoryId'),
             'jumlahDI' => $this->request->getPost('jumlahDI'),
             'tanggalDI' => $this->request->getPost('tanggalDI'),
-            'vendor' => $this->request->getPost('vendor', FILTER_SANITIZE_STRING),
             'harga' => $this->request->getPost('harga', FILTER_SANITIZE_STRING),
             'total' => $this->request->getPost('total', FILTER_SANITIZE_STRING),
         ];
@@ -181,11 +183,6 @@ class DataInventaris extends BaseController
                 'label' => 'jumlahDI',
                 'rules' => 'required',
                 'errors' => ['required' => 'jumlah required!']
-            ],
-            'vendor' => [
-                'label' => 'vendor',
-                'rules' => 'required',
-                'errors' => ['required' => 'vendor pengadaan required!']
             ],
             'tanggalDI' => [
                 'label' => 'tanggal',
@@ -216,7 +213,6 @@ class DataInventaris extends BaseController
         $dataQuery = [
             'tanggalDI' => date('Y-m-d'),
             'jumlahDI' => $data['jumlahDI'],
-            'vendor' => $data['vendor'],
             'harga' => $data['harga'],
             'total' => $data['total'],
         ];

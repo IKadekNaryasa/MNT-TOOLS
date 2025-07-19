@@ -10,12 +10,26 @@ class Pengembalian extends BaseController
 {
     public function index()
     {
-        $data = [
-            'pengembalian' => $this->Pengembalian->getDataByUser(\decrypt_id(\session('usersId'))),
-            'active' => 'pengembalian'
+        $pengembalianData = $this->Pengembalian->getDataByUser(\decrypt_id(\session('usersId')));
 
+        $semuaKodeAlat = [];
+        foreach ($pengembalianData as $item) {
+            $kodeAlatArray = explode(',', $item['kodeAlat']);
+            $kodeAlatArray = array_map('trim', $kodeAlatArray);
+            $semuaKodeAlat = array_merge($semuaKodeAlat, $kodeAlatArray);
+        }
+        $semuaKodeAlat = array_unique($semuaKodeAlat);
+
+
+        $statusAlat = $this->MntTools->getStatusAlat($semuaKodeAlat);
+
+
+        $data = [
+            'pengembalian' => $pengembalianData,
+            'statusAlat' => $statusAlat,
+            'active' => 'pengembalian'
         ];
-        // \dd($data);
+
         return \view('teknisi/pengembalian/index', $data);
     }
 

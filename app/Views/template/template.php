@@ -162,6 +162,15 @@
                                 <p>Kategori</p>
                             </a>
                         </li>
+                        <li class="nav-item <?= $active == 'vendor' ? 'active' : ''; ?> ">
+                            <a
+                                href="<?= base_url(); ?>admin/vendor"
+                                class="collapsed"
+                                aria-expanded="false">
+                                <i class="fas fa-building"></i>
+                                <p>Vendor</p>
+                            </a>
+                        </li>
                         <li class="nav-item <?= $active == 'mnt-tools' ? 'active' : ''; ?> ">
                             <a
                                 href="<?= base_url(); ?>admin/tools"

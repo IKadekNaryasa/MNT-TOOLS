@@ -113,12 +113,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
-                                <label>Vendor</label>
-                                <input type="text" id="vendor" name="vendor" value="<?= old('vendor'); ?>" type="text" class="form-control" autocomplete="off" placeholder="" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-default">
                                 <label>Harga Satuan</label>
                                 <input type="number" id="harga" name="harga" value="<?= old('harga'); ?>" class="form-control" autocomplete="off" placeholder="">
                             </div>
@@ -130,7 +124,6 @@
                             </div>
                         </div>
 
-
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
                                 <label>Kategori</label>
@@ -138,6 +131,17 @@
                                     <option disabled value="" selected>Pilih Kategori</option>
                                     <?php foreach ($categories as $kg): ?>
                                         <option value="<?= $kg['categoryId']; ?>"><?= $kg['namaKategori']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default">
+                                <label>Vendor</label>
+                                <select class="form-select" name="vendorId" id="" required>
+                                    <option disabled value="" selected>Pilih Vendor</option>
+                                    <?php foreach ($vendors as $vn): ?>
+                                        <option value="<?= $vn['vendorId']; ?>"><?= $vn['vendor']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

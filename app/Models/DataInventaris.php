@@ -12,7 +12,7 @@ class DataInventaris extends Model
     // protected $returnType       = 'array';
     // protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['categoryId', 'tanggalDI', 'jumlahDI', 'vendor', 'harga', 'total'];
+    protected $allowedFields    = ['categoryId', 'tanggalDI', 'jumlahDI', 'vendorId', 'harga', 'total'];
 
     // protected bool $allowEmptyInserts = false;
     // protected bool $updateOnlyChanged = true;
@@ -49,6 +49,7 @@ class DataInventaris extends Model
         $builder = $this->db->table($this->table);
         $builder->select('*');
         $builder->join('categories', 'dataInventaris.categoryId = categories.categoryId');
+        $builder->join('vendors', 'dataInventaris.vendorId = vendors.vendorId');
         $builder->orderBy('dataInventarisId', 'DESC');
         return $builder->get()->getResultArray();
     }
@@ -58,6 +59,7 @@ class DataInventaris extends Model
         $builder = $this->db->table($this->table);
         $builder->select('*');
         $builder->join('categories', 'dataInventaris.categoryId = categories.categoryId');
+        $builder->join('vendors', 'dataInventaris.vendorId = vendors.vendorId');
         $builder->where('dataInventarisId', $id);
         return $builder->get()->getResultArray();
     }
@@ -76,6 +78,7 @@ class DataInventaris extends Model
         $builder = $this->db->table($this->table);
         $builder->select('tanggalDI,jumlahDI,vendor,total,categories.namaKategori');
         $builder->join('categories', 'datainventaris.categoryId = categories.categoryId');
+        $builder->join('vendors', 'dataInventaris.vendorId = vendors.vendorId');
         $builder->where('tanggalDI >= ', $awal);
         $builder->where('tanggalDI <= ', $akhir);
         return $builder->get()->getResultArray();
@@ -85,6 +88,7 @@ class DataInventaris extends Model
         $builder = $this->db->table($this->table);
         $builder->select('tanggalDI,jumlahDI,vendor,total,categories.namaKategori');
         $builder->join('categories', 'datainventaris.categoryId = categories.categoryId');
+        $builder->join('vendors', 'dataInventaris.vendorId = vendors.vendorId');
         $builder->where('tanggalDI >= ', $awal);
         $builder->where('tanggalDI <= ', $akhir);
         $builder->where('categories.categoryId', $categoryId);

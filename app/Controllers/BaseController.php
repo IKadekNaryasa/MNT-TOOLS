@@ -9,6 +9,7 @@ use App\Models\MntTools;
 use App\Models\Perawatan;
 use App\Models\Perbaikan;
 use App\Models\Peminjaman;
+use App\Models\Vendor;
 use CodeIgniter\Controller;
 use App\Models\Pengembalian;
 use Psr\Log\LoggerInterface;
@@ -78,6 +79,7 @@ abstract class BaseController extends Controller
     protected $Perbaikan;
     protected $Requests;
     protected $Users;
+    protected $vendor;
     public function __construct()
     {
         $this->Categories = new Category();
@@ -91,5 +93,6 @@ abstract class BaseController extends Controller
         $this->Perbaikan = new Perbaikan();
         $this->Requests = new Request();
         $this->Users = new Users();
+        $this->vendor = new Vendor();
     }
 }

@@ -18,6 +18,10 @@ class DataInventarisTable extends Migration
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
+            'vendorId'      => [
+                'type'           => 'INT',
+                'unsigned'       => true,
+            ],
             'tanggalDI' => [
                 'type'           => 'DATE',
             ],
@@ -25,11 +29,6 @@ class DataInventarisTable extends Migration
                 'type'           => 'INT',
                 'unsigned'       => true,
                 'null'        => true,
-            ],
-            'vendor'            => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255',
-                'null'           => true,
             ],
             'harga'            => [
                 'type'           => 'VARCHAR',
@@ -47,6 +46,7 @@ class DataInventarisTable extends Migration
 
         $this->forge->addKey('dataInventarisId', true);
         $this->forge->addForeignKey('categoryId', 'categories', 'categoryId', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('vendorId', 'vendors', 'vendorId', 'CASCADE', 'CASCADE');
         $this->forge->createTable('dataInventaris');
     }
 

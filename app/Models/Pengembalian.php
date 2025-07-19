@@ -146,6 +146,8 @@ class Pengembalian extends Model
         return $builder->get()->getResultArray();
     }
 
+
+
     public function getAllDataByRange($awal, $akhir)
     {
         $builder = $this->db->table($this->table);

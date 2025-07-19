@@ -26,6 +26,7 @@ use App\Controllers\Teknisi\Dashboard as TeknisiDashboard;
 use App\Controllers\Admin\DataInventaris as AdminInventaris;
 use App\Controllers\Admin\DataInventaris;
 use App\Controllers\Admin\Pengembalian as AdminPengembalian;
+use App\Controllers\Admin\Vendor;
 use App\Controllers\Teknisi\Peminjaman as TeknisiPeminjaman;
 use App\Controllers\Teknisi\Pengembalian as TeknisiPengembalian;
 
@@ -57,6 +58,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     $routes->get('dashboard', [AdminDashboard::class, 'index']);
     $routes->get('inventaris', [AdminInventaris::class, 'index']);
     $routes->get('categories', [AdminCategories::class, 'index']);
+    $routes->get('vendor', [Vendor::class, 'index']);
     $routes->get('tools', [AdminTools::class, 'index']);
     $routes->get('peminjaman', [AdminPeminjaman::class, 'index']);
     $routes->get('pengembalian', [AdminPengembalian::class, 'index']);
@@ -87,6 +89,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
 
     // routes for insert data
     $routes->post('insertCategory', [AdminCategories::class, 'store']);
+    $routes->post('insertVendor', [Vendor::class, 'store']);
     $routes->post('insertInventaris', [AdminInventaris::class, 'store']);
     $routes->post('insertTool', [AdminTools::class, 'store']);
     $routes->post('insertUser', [AdminUsers::class, 'store']);
@@ -94,6 +97,8 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     // routes for update 
     $routes->get('category/u/(:any)', [AdminCategories::class, 'viewUpdate']);
     $routes->PUT('category/update', [AdminCategories::class, 'update']);
+    $routes->get('vendor/u/(:any)', [Vendor::class, 'viewUpdate']);
+    $routes->PUT('vendor/update', [Vendor::class, 'update']);
     $routes->get('tools/u/(:any)', [AdminTools::class, 'viewUpdate']);
     $routes->PUT('tools/update', [AdminTools::class, 'update']);
     $routes->PUT('perawatan/update', [AdminPerawatan::class, 'update']);
@@ -108,6 +113,7 @@ $routes->group('admin', ['filter' => 'admin'], function ($routes) {
     // routes for Delete
     $routes->DELETE('users/delete', [AdminUsers::class, 'delete']);
     $routes->DELETE('tools/delete', [AdminTools::class, 'delete']);
+    $routes->DELETE('vendor/delete', [Vendor::class, 'delete']);
 
 
     // routes for import

@@ -53,6 +53,27 @@ class MntTools extends Model
         return $builder->get()->getResultArray();
     }
 
+    public function getStatusAlat($kodeAlatArray)
+    {
+        if (empty($kodeAlatArray)) {
+            return [];
+        }
+
+
+        $builder = $this->db->table($this->table);
+        $builder->select('kodeAlat, status');
+        $builder->whereIn('kodeAlat', $kodeAlatArray);
+        $result = $builder->get()->getResultArray();
+
+
+        $statusAlat = [];
+        foreach ($result as $item) {
+            $statusAlat[$item['kodeAlat']] = $item['status'];
+        }
+
+        return $statusAlat;
+    }
+
     public function getDataByToolId($mntToolsId)
     {
         $builder = $this->db->table($this->table);

@@ -45,7 +45,7 @@
                 <div class="col-md-4">
                     <div class="form-group form-group-default">
                         <label>Vendor</label>
-                        <input type="text" id="vendor" name="vendor" value="<?= $inventaris['vendor'] ?? old('vendor'); ?>" type="text" class="form-control" autocomplete="off" placeholder="" required>
+                        <input type="text" id="vendor" name="vendor" readonly value="<?= $vendor ?? old('vendor'); ?>" type="text" class="form-control" autocomplete="off">
                     </div>
                 </div>
                 <div class="col-md-4">
