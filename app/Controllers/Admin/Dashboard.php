@@ -23,6 +23,7 @@ class Dashboard extends BaseController
         $pengembalian = $this->Pengembalian->where('statusPengembalian', 'disetujui')->countAllResults();
         $admin = $this->Users->where('role', 'admin')->countAllResults();
         $teknisi = $this->Users->where('role', 'teknisi')->countAllResults();
+        $vendor = $this->vendor->countAllResults();
 
         // dd($pengadaan, $kategori, $inventory, $tersedia, $perbaikan, $perawatan, $dipinjam, $rusak, $admin, $teknisi);
 
@@ -39,6 +40,7 @@ class Dashboard extends BaseController
             'rusak' => $rusak,
             'peminjaman' => $peminjaman,
             'pengembalian' => $pengembalian,
+            'vendor' => $vendor,
             'admin' => $admin,
             'teknisi' => $teknisi,
             'active' => 'dashboard'
